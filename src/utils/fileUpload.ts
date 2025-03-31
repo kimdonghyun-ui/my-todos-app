@@ -25,7 +25,7 @@ export function handleFileUpload(
 			</svg>
 		  `;
 
-				console.log("SVG 코드:", svgString);
+				// console.log("SVG 코드:", svgString);
 				resolve(svgString); // ✅ 비동기 작업 완료 후 svgString 반환
 			};
 

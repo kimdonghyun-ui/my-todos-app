@@ -5,13 +5,16 @@ import { useRouter } from 'next/navigation';
 // import { useAuthStore } from '@/store/authStore';
 import { useAuth } from '@/hooks/useAuth';
 import { handleFileUpload } from "@/utils/fileUpload";
+import Header from '@/components/layout/Header';
 
 export default function RegisterForm() {
   const [profileImage, setProfileImage] = useState<string>("");
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -21,14 +24,19 @@ export default function RegisterForm() {
     e.preventDefault();
     setError(null);
 
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.passwordConfirm) {
       setError('비밀번호가 일치하지 않습니다.');
       return;
     }
 
     try {
       setIsLoading(true);
-      await handleRegister({ username, email, password, profileImage });
+      await handleRegister({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        profileImage,
+      });
       router.push('/login');
     } catch (err) {
       setError(err instanceof Error ? err.message : '회원가입에 실패했습니다.');
@@ -36,7 +44,6 @@ export default function RegisterForm() {
       setIsLoading(false);
     }
   };
-
 
 	// ✅ 파일 선택 핸들러
 	const handleFileChange = async (
@@ -54,103 +61,100 @@ export default function RegisterForm() {
 		}
 	};
 
-
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* 헤더 */}
-        <div className="bg-[#FEE500] p-6 flex items-center justify-center">
-          <div className="text-2xl font-bold text-gray-800">회원가입</div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
+      <Header title="회원가입" showBackButton />
+      <div className="max-w-md mx-auto px-4 pt-24 pb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+          <div className="mb-8 text-center">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">새로운 계정 만들기</h2>
+            <p className="text-gray-600 dark:text-gray-400">할 일을 관리하기 위한 계정을 만들어보세요</p>
+          </div>
 
-        {/* 회원가입 폼 */}
-        <div className="p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
+            <div>
+              <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                프로필 이미지
+              </label>
+              <input
+                id="profileImage"
+                name="profileImage"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                required
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                         dark:bg-gray-700 dark:text-white"
+              />
+            </div>
 
             <div>
-                <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700 mb-1">
-                  프로필 이미지
-                </label>
-                <input
-                  id="profileImage"
-                  name="profileImage"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FEE500] focus:border-transparent text-gray-800"
-                />
-              </div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                사용자명
+              </label>
+              <input
+                type="text"
+                id="username"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                         dark:bg-gray-700 dark:text-white"
+                required
+              />
+            </div>
 
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                이메일
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                         dark:bg-gray-700 dark:text-white"
+                required
+              />
+            </div>
 
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                비밀번호
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                         dark:bg-gray-700 dark:text-white"
+                required
+              />
+            </div>
 
-
-              <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-                  사용자명
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FEE500] focus:border-transparent text-gray-800"
-                  placeholder="사용자명을 입력하세요"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  이메일
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FEE500] focus:border-transparent text-gray-800"
-                  placeholder="이메일을 입력하세요"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  비밀번호
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FEE500] focus:border-transparent text-gray-800"
-                  placeholder="비밀번호를 입력하세요"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                  비밀번호 확인
-                </label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FEE500] focus:border-transparent text-gray-800"
-                  placeholder="비밀번호를 다시 입력하세요"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
+            <div>
+              <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                비밀번호 확인
+              </label>
+              <input
+                type="password"
+                id="passwordConfirm"
+                value={formData.passwordConfirm}
+                onChange={(e) => setFormData({ ...formData, passwordConfirm: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
+                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                         dark:bg-gray-700 dark:text-white"
+                required
+              />
             </div>
 
             {error && (
-              <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded-md">
+              <div className="text-red-500 text-sm text-center bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
                 {error}
               </div>
             )}
@@ -158,7 +162,9 @@ export default function RegisterForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 bg-[#FEE500] text-gray-800 font-medium rounded-md hover:bg-[#FDD800] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FEE500] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-lg 
+                       hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                       focus:ring-blue-500 transition-colors duration-200"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">
@@ -170,18 +176,13 @@ export default function RegisterForm() {
               )}
             </button>
 
-            <div className="text-center text-sm text-gray-600">
+            <div className="text-center text-sm text-gray-600 dark:text-gray-400">
               이미 계정이 있으신가요?{' '}
-              <a href="/login" className="text-[#FEE500] hover:text-[#FDD800] transition-colors duration-200">
-                로그인하기
+              <a href="/login" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+                로그인
               </a>
             </div>
           </form>
-        </div>
-
-        {/* 푸터 */}
-        <div className="bg-gray-50 p-4 text-center text-sm text-gray-500">
-          © 2024 My Budget App. All rights reserved.
         </div>
       </div>
     </div>

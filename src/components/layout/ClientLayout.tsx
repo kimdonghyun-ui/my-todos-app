@@ -7,6 +7,8 @@ import { protectedRoutes } from "@/lib/constants/auth";
 import { isProtectedRoute } from "@/utils/utils";
 import { useAuthStatus } from '@/hooks/useAuthStatus';
 import { performLogout } from "@/lib/auth";
+import { useThemeStore } from "@/store/themeStore";
+import Header from "./Header";
 
 export default function ClientLayout({
   children,
@@ -17,9 +19,20 @@ export default function ClientLayout({
     const router = useRouter();
     const pathname = usePathname();
     const user = useAuthStore((state) => state.user);
-
+    const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
   const { isInitialized } = useAuthStatus();
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
+
+
   useEffect(() => {
     if (!isInitialized) return; // ✅ 초기화 안됐으면 무시
 
@@ -44,8 +57,11 @@ export default function ClientLayout({
     );
   }
   
+  // 로그인 페이지에서는 헤더를 표시하지 않음
+  const showHeader = pathname !== '/login';
 
   return <>
+  {showHeader && <Header showBackButton />}
   {/* <span className="text-sm">안녕하세요, {user?.username ?? "게스트"}님</span> */}
   {children}
   </>;

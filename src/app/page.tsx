@@ -1,24 +1,21 @@
-
-
 import TodoInput from '@/components/TodoInput';
 import TodoList from '@/components/TodoList';
-import DarkModeToggle from '@/components/DarkModeToggle';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      <div className="max-w-2xl mx-auto">
-        <header className="flex justify-between items-center p-4">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-            My Todo List
-          </h1>
-          <DarkModeToggle />
-        </header>
-        <main>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
+      <main className="max-w-2xl mx-auto px-4 pt-24 pb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">할 일 목록</h2>
+            <p className="text-gray-600 dark:text-gray-400">오늘의 할 일을 관리해보세요</p>
+          </div>
           <TodoInput />
-          <TodoList />
-        </main>
-      </div>
+          <div className="mt-8">
+            <TodoList />
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
