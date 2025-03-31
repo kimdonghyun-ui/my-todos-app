@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ClientLayout from "@/components/layout/ClientLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        {/* 클라이언트 레이아웃 = 현재 페이지는 서버페이지 라서 아래 컴포넌트를 한번더 감싸서 저안에서 클라이언트 관련 코드 작성 */}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
