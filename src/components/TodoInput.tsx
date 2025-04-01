@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { useTodoStore } from '@/store/todoStore';
+import { useAuthStore } from '@/store/authStore';
 
 export default function TodoInput() {
   const [content, setContent] = useState('');
   const { addTodo, isLoading } = useTodoStore();
+  const { user } = useAuthStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,7 +16,8 @@ export default function TodoInput() {
     try {
       await addTodo({
         content: content.trim(),
-        isCompleted: false
+        isCompleted: false,
+        userId: `${user?.id}`
       });
       setContent('');
     } catch (error) {

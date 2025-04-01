@@ -86,3 +86,14 @@ export const isProtectedRoute = (
       return pathname.startsWith(route);
     });
   };
+
+
+  export const getTitleFromPath = (path: string) => {
+    const map: Record<string, string> = {
+      '/': 'My Todo List',
+      '/login': '로그인',
+      '/profile': '내 프로필',
+      '/register': '회원가입',
+    };
+    return map[path] || '페이지';
+  };

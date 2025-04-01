@@ -5,15 +5,21 @@ import { performLogout } from '@/lib/auth';
 import { useAuthStore } from '@/store/authStore';
 import { useThemeStore } from '@/store/themeStore';
 import DarkModeToggle from '../DarkModeToggle';
+import { usePathname } from 'next/navigation';
+import { getTitleFromPath } from '@/utils/utils';
 
 interface HeaderProps {
   showBackButton?: boolean;
-  title?: string;
+  // title?: string;
 }
 
-export default function Header({ showBackButton = false, title = 'My Todo List' }: HeaderProps) {
+export default function Header({ showBackButton = false }: HeaderProps) {
+  const path = usePathname();
+  const title = getTitleFromPath(path);
+  
+
   const router = useRouter();
-  const user = useAuthStore((state) => state.user);
+  const accessToken = useAuthStore((state) => state.accessToken);
   const { isDarkMode, toggleDarkMode } = useThemeStore();
 
   const handleLogout = async () => {
@@ -40,24 +46,28 @@ export default function Header({ showBackButton = false, title = 'My Todo List' 
         
         <div className="flex items-center gap-4">
           <DarkModeToggle />
-          <button
-            onClick={() => router.push('/profile')}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-            title="프로필"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </button>
-          <button
-            onClick={handleLogout}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-            title="로그아웃"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-          </button>
+          {accessToken && (
+            <>
+              <button
+                onClick={() => router.push('/profile')}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                title="프로필"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                title="로그아웃"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </header>

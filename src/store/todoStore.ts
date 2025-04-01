@@ -2,13 +2,14 @@ import { create } from 'zustand';
 import { Todo, CreateTodoInput, UpdateTodoInput, TodoResponse, TodoPostResponse } from '@/types/todo';
 import { fetchApi } from '@/lib/fetchApi';
 
+
 interface TodoState {
   todos: Todo[];
   isLoading: boolean;
   error: string | null;
   
   // Actions
-  fetchTodos: () => Promise<void>;
+  fetchTodos: (userId: string) => Promise<void>;
   addTodo: (input: CreateTodoInput) => Promise<void>;
   updateTodo: (id: number, input: UpdateTodoInput) => Promise<void>;
   deleteTodo: (id: number) => Promise<void>;
@@ -20,10 +21,10 @@ export const useTodoStore = create<TodoState>((set, get) => ({
   isLoading: false,
   error: null,
 
-  fetchTodos: async () => {
+  fetchTodos: async (userId: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetchApi<TodoResponse>('/todos', { method: 'GET' });
+      const response = await fetchApi<TodoResponse>(`/todos?filters[userId][$eq]=${userId}`, { method: 'GET' });
       
       set({ todos: response.data.sort((a, b) => 
         new Date(b.attributes.createdAt).getTime() - new Date(a.attributes.createdAt).getTime()
@@ -37,7 +38,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
 
   addTodo: async (input: CreateTodoInput) => {
     set({ isLoading: true });
-    console.log(input);
+    // console.log(input);
     try {
       const response = await fetchApi<TodoPostResponse>('/todos', {
         method: 'POST',

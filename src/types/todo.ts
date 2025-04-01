@@ -5,7 +5,7 @@ export interface Todo {
   attributes: {
     content: string;
     isCompleted: boolean;
-    // userId: string;
+    userId: string;
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
@@ -15,6 +15,7 @@ export interface Todo {
 export interface CreateTodoInput {
   content: string;
   isCompleted?: boolean;
+  userId: string;
 }
 
 export interface UpdateTodoInput {

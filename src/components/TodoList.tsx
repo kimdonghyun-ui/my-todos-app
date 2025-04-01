@@ -3,15 +3,16 @@
 import { useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useTodoStore } from '@/store/todoStore';
+import { useAuthStore } from '@/store/authStore';
 import TodoItem from './TodoItem';
 
 export default function TodoList() {
   const { todos, fetchTodos, isLoading, error } = useTodoStore();
+  const { user } = useAuthStore();
 
   useEffect(() => {
-    fetchTodos();
+    fetchTodos(`${user?.id}`);
   }, [fetchTodos]);
-  console.log(todos);
 
   if (isLoading) {
     return (
