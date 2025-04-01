@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { performLogout } from '@/lib/auth';
 import { useAuthStore } from '@/store/authStore';
-import { useThemeStore } from '@/store/themeStore';
 import DarkModeToggle from '../DarkModeToggle';
 import { usePathname } from 'next/navigation';
 import { getTitleFromPath } from '@/utils/utils';
@@ -20,7 +19,6 @@ export default function Header({ showBackButton = false }: HeaderProps) {
 
   const router = useRouter();
   const accessToken = useAuthStore((state) => state.accessToken);
-  const { isDarkMode, toggleDarkMode } = useThemeStore();
 
   const handleLogout = async () => {
     await performLogout();

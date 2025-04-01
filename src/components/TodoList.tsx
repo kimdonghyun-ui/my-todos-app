@@ -12,7 +12,7 @@ export default function TodoList() {
 
   useEffect(() => {
     fetchTodos(`${user?.id}`);
-  }, [fetchTodos]);
+  }, [fetchTodos, user]);
 
   if (isLoading) {
     return (

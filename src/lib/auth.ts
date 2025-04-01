@@ -17,7 +17,7 @@ export async function performLogout() {
     await logoutApi();
   } catch (e) {
     // 실패시에는 도 아래 코드에서 넥스트 API 통해서 쿠키를 삭제하기떄문에  어쨋던 클라이언트에서는 쿠키가 삭제됨
-    console.warn("서버 로그아웃 실패. 어쨌든 클라이언트 상태는 초기화");
+    console.warn("서버 로그아웃 실패. 어쨌든 클라이언트 상태는 초기화",e);
   }
 
   // HttpOnly 쿠키 제거 요청 (Next.js API route)

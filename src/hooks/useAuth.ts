@@ -7,7 +7,7 @@ import { useAuthStore } from "@/store/authStore";
 import { loginApi, registerApi, profileUpdateApi } from '@/lib/api';
 import { setLocalStorage } from '@/utils/utils';
 
-const API_URL = 'http://localhost:1337/api';
+// const API_URL = 'http://localhost:1337/api';
 
 interface UseAuthReturn {
   handleLogin: (credentials: LoginCredentials) => Promise<void>;
@@ -59,7 +59,7 @@ export function useAuth(): UseAuthReturn {
   const handleRegister = useCallback(async (credentials: RegisterCredentials) => {
     
     try {
-        const response = await registerApi(credentials); // ✅ API 호출
+        await registerApi(credentials); // ✅ API 호출
         alert("회원가입 성공");
         await handleLogin({ 
             identifier: credentials.email,
@@ -68,7 +68,7 @@ export function useAuth(): UseAuthReturn {
     } catch (error) {
       console.error("Login failed:", error);
     }
-  }, [setAccessToken, setUser, router]);
+  }, [handleLogin]);
 
 
 
@@ -84,7 +84,7 @@ export function useAuth(): UseAuthReturn {
     } catch (error) {
       console.error("Login failed:", error);
     }
-  }, [setAccessToken, setUser, router]);
+  }, [setUser]);
 
 
 

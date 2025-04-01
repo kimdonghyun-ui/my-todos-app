@@ -9,7 +9,7 @@
 
 import { useAuthStore } from "@/store/authStore"; //zustand 
 import { ApiError, handleResponse } from "@/utils/utils"; //
-import { refreshApi, logoutApi } from "./api"; //
+import { refreshApi } from "./api"; //
 import { performLogout, updateAccessToken } from "@/lib/auth"; //
 
 // 통합된 API 요청 함수
@@ -48,6 +48,7 @@ export async function fetchApi<T>(
             return fetchApi<T>(url, options, auth, false); // ✅ 3) 다시 원래 요청 시도
 
         } catch (error) {
+            console.error('refreshApi 에러 발생:', error);
             await performLogout(); // 로그아웃 처리 기능 모음(
             throw new ApiError(401, "Session expired");
         }

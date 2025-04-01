@@ -18,7 +18,6 @@ export default function ClientLayout({
     const accessToken = useAuthStore((state) => state.accessToken);
     const router = useRouter();
     const pathname = usePathname();
-    const user = useAuthStore((state) => state.user);
     const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
   const { isInitialized } = useAuthStatus();
@@ -45,7 +44,7 @@ export default function ClientLayout({
             router.push("/login");
         }, 10);
     }
-  }, [accessToken, pathname, router]);
+  }, [accessToken, pathname, router, isInitialized]);
 
 
   if (!isInitialized) {

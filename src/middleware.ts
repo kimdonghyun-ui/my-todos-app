@@ -30,7 +30,14 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
+
 // 미들웨어가 적용될 경로 설정
 export const config = {
-  matcher: [...protectedRoutes, ...authRoutes],
+
+  matcher: [
+    '/',              // protected
+    '/profile',       // protected
+    '/users',         // protected
+    '/login',         // auth
+  ],
 }; 

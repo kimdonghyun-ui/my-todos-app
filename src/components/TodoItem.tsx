@@ -15,7 +15,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
   const { updateTodo, deleteTodo } = useTodoStore();
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(todo.attributes.content ?? '');
-  const timeAgo = formatDistanceToNow(new Date(todo.attributes.createdAt), { addSuffix: true });
+  const timeAgo = formatDistanceToNow(new Date(todo.attributes.createdAt), { addSuffix: true, locale: ko });
 
 
   // handleClickEditing = 마우스로 텍스트 클릭시 수정모드로 전환
@@ -118,7 +118,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
       </div>
 
       <p className="text-xs text-gray-400 mt-2 dark:text-gray-500">
-        {formatDistanceToNow(new Date(todo.attributes.createdAt), { addSuffix: true, locale: ko })}
+        {timeAgo}
       </p>
     </motion.div>
   );

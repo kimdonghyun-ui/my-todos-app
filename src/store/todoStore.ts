@@ -16,7 +16,7 @@ interface TodoState {
   setError: (error: string | null) => void;
 }
 
-export const useTodoStore = create<TodoState>((set, get) => ({
+export const useTodoStore = create<TodoState>((set) => ({
   todos: [],
   isLoading: false,
   error: null,
@@ -30,6 +30,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
         new Date(b.attributes.createdAt).getTime() - new Date(a.attributes.createdAt).getTime()
       )});
     } catch (error) {
+      console.error('fetchTodos 에러 발생:', error);
       set({ error: '할 일 목록을 불러오는데 실패했습니다.' });
     } finally {
       set({ isLoading: false });
@@ -48,6 +49,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
         todos: [response.data, ...state.todos]
       }));
     } catch (error) {
+      console.error('addTodo 에러 발생:', error);
       set({ error: '할 일 추가에 실패했습니다.' });
     } finally {
       set({ isLoading: false });
@@ -67,6 +69,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
         )
       }));
     } catch (error) {
+      console.error('updateTodo 에러 발생:', error);
       set({ error: '할 일 수정에 실패했습니다.' });
     } finally {
       set({ isLoading: false });
@@ -81,6 +84,7 @@ export const useTodoStore = create<TodoState>((set, get) => ({
         todos: state.todos.filter(todo => todo.id !== id)
       }));
     } catch (error) {
+      console.error('deleteTodo 에러 발생:', error);
       set({ error: '할 일 삭제에 실패했습니다.' });
     } finally {
       set({ isLoading: false });
