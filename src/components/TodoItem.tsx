@@ -54,7 +54,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
   className="group bg-white dark:bg-gray-800 rounded-xl p-4 mb-3 shadow-sm 
              hover:shadow-md transition-all duration-200"
 >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 min-w-0">
         <button
           onClick={() => updateTodo(todo.id, { isCompleted: !todo.attributes.isCompleted })}
           className="flex-shrink-0"
@@ -81,7 +81,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
             autoFocus
-            className="flex-1 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 
+            className="min-w-0 w-0 flex-1 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 
                      focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 
                      dark:text-white"
           />

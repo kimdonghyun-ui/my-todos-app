@@ -22,7 +22,7 @@ export default function Header({ showBackButton = false }: HeaderProps) {
 
   const handleLogout = async () => {
     await performLogout();
-    router.push('/login');
+    // router.push('/login');
   };
 
   return (

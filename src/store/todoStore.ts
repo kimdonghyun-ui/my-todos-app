@@ -22,7 +22,7 @@ export const useTodoStore = create<TodoState>((set) => ({
   error: null,
 
   fetchTodos: async (userId: string) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
       const response = await fetchApi<TodoResponse>(`/todos?filters[userId][$eq]=${userId}`, { method: 'GET' });
       
@@ -38,7 +38,7 @@ export const useTodoStore = create<TodoState>((set) => ({
   },
 
   addTodo: async (input: CreateTodoInput) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     // console.log(input);
     try {
       const response = await fetchApi<TodoPostResponse>('/todos', {
@@ -57,7 +57,7 @@ export const useTodoStore = create<TodoState>((set) => ({
   },
 
   updateTodo: async (id: number, input: UpdateTodoInput) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
       const response = await fetchApi<TodoPostResponse>(`/todos/${id}`, {
         method: 'PUT',
@@ -77,7 +77,7 @@ export const useTodoStore = create<TodoState>((set) => ({
   },
 
   deleteTodo: async (id: number) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
       await fetchApi(`/todos/${id}`, { method: 'DELETE' });
       set(state => ({
@@ -92,4 +92,4 @@ export const useTodoStore = create<TodoState>((set) => ({
   },
 
   setError: (error: string | null) => set({ error }),
-})); 
+}));

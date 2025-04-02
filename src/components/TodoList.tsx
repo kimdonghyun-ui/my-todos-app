@@ -11,8 +11,10 @@ export default function TodoList() {
   const { user } = useAuthStore();
 
   useEffect(() => {
-    fetchTodos(`${user?.id}`);
-  }, [fetchTodos, user]);
+    if (user?.id) {
+      fetchTodos(`${user.id}`);
+    }
+  }, [fetchTodos,user]);
 
   if (isLoading) {
     return (
