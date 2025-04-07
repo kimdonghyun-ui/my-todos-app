@@ -20,7 +20,7 @@ interface MoodState {
   updateMood: (id: number, emoji: MoodEmoji, memo: string, userId: string) => Promise<void>;
 }
 
-export const useMoodStore = create<MoodState>((set, get) => ({
+export const useMoodStore = create<MoodState>((set) => ({
   todayMood: null,
   moods: [],
   stats: null,
@@ -30,9 +30,9 @@ export const useMoodStore = create<MoodState>((set, get) => ({
   fetchMoodByDate: async (date: string, userId: string) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await fetchApi(`/moods?filters[date][$eq]=${date}&filters[userId][$eq]=${userId}`);
+      const response = await fetchApi<{ data: Mood[] }>(`/moods?filters[date][$eq]=${date}&filters[userId][$eq]=${userId}`, { method: 'GET' });
       set({ todayMood: response.data[0] || null });
-    } catch (error) {
+    } catch {
       set({ error: '기분을 불러오는데 실패했습니다.' });
     } finally {
       set({ isLoading: false });
@@ -42,9 +42,9 @@ export const useMoodStore = create<MoodState>((set, get) => ({
   fetchMoods: async (userId: string) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await fetchApi(`/moods?sort=date:desc&filters[userId][$eq]=${userId}`);
+      const response = await fetchApi<{ data: Mood[] }>(`/moods?sort=date:desc&filters[userId][$eq]=${userId}`, { method: 'GET' });
       set({ moods: response.data });
-    } catch (error) {
+    } catch {
       set({ error: '기분 기록을 불러오는데 실패했습니다.' });
     } finally {
       set({ isLoading: false });
@@ -54,7 +54,7 @@ export const useMoodStore = create<MoodState>((set, get) => ({
   fetchStats: async (userId: string) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await fetchApi(`/moods?filters[userId][$eq]=${userId}`);
+      const response = await fetchApi<{ data: Mood[] }>(`/moods?filters[userId][$eq]=${userId}`, { method: 'GET' });
       const moods = response.data;
       
       // 통계 계산
@@ -84,7 +84,7 @@ export const useMoodStore = create<MoodState>((set, get) => ({
           mostFrequent,
         },
       });
-    } catch (error) {
+    } catch {
       set({ error: '통계 데이터를 불러오는데 실패했습니다.' });
     } finally {
       set({ isLoading: false });
@@ -94,7 +94,7 @@ export const useMoodStore = create<MoodState>((set, get) => ({
   saveMood: async (emoji: MoodEmoji, memo: string, date: string, userId: string) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await fetchApi('/moods', {
+      const response = await fetchApi<{ data: Mood }>('/moods', {
         method: 'POST',
         body: JSON.stringify({
           data: {
@@ -106,7 +106,7 @@ export const useMoodStore = create<MoodState>((set, get) => ({
         }),
       });
       set({ todayMood: response.data });
-    } catch (error) {
+    } catch {
       set({ error: '기분을 저장하는데 실패했습니다.' });
     } finally {
       set({ isLoading: false });
@@ -116,7 +116,7 @@ export const useMoodStore = create<MoodState>((set, get) => ({
   updateMood: async (id: number, emoji: MoodEmoji, memo: string, userId: string) => {
     try {
       set({ isLoading: true, error: null });
-      const response = await fetchApi(`/moods/${id}`, {
+      const response = await fetchApi<{ data: Mood }>(`/moods/${id}`, {
         method: 'PUT',
         body: JSON.stringify({
           data: {
@@ -127,7 +127,7 @@ export const useMoodStore = create<MoodState>((set, get) => ({
         }),
       });
       set({ todayMood: response.data });
-    } catch (error) {
+    } catch {
       set({ error: '기분을 수정하는데 실패했습니다.' });
     } finally {
       set({ isLoading: false });

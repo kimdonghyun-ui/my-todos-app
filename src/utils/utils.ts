@@ -1,6 +1,6 @@
 //utils/ (유틸리티 함수 폴더)
 
-import { MoodEmoji } from "@/types/mood";
+// import { MoodEmoji } from "@/types/mood";
 
 // 📌 개념:
 

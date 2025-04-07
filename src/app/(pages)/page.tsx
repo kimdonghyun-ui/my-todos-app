@@ -7,7 +7,7 @@ import { MoodIcon } from '@/components/MoodIcon';
 import { useMoodStore } from '@/store/moodStore';
 import { useAuthStore } from '@/store/authStore';
 import { MoodEmoji } from '@/types/mood';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const MOODS: MoodEmoji[] = ['laugh', 'smile', 'meh', 'frown', 'angry'];
 

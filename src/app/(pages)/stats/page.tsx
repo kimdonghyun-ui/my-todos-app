@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { format, getDaysInMonth, startOfMonth } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { getDaysInMonth, startOfMonth } from 'date-fns';
 import { MoodIcon } from '@/components/MoodIcon';
 import { useMoodStore } from '@/store/moodStore';
 import { useAuthStore } from '@/store/authStore';

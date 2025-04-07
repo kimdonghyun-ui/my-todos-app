@@ -1,13 +1,13 @@
-import { LucideIcon } from 'lucide-react';
+import { Laugh, Smile, Meh, Frown, Angry, LucideIcon } from 'lucide-react';
 import { MoodEmoji } from '@/types/mood';
 import { motion } from 'framer-motion';
 
 const iconMap: Record<MoodEmoji, LucideIcon> = {
-  laugh: require('lucide-react').Laugh,
-  smile: require('lucide-react').Smile,
-  meh: require('lucide-react').Meh,
-  frown: require('lucide-react').Frown,
-  angry: require('lucide-react').Angry,
+  laugh: Laugh,
+  smile: Smile,
+  meh: Meh,
+  frown: Frown,
+  angry: Angry,
 };
 
 const colorMap: Record<MoodEmoji, { light: string; dark: string }> = {
