@@ -9,7 +9,7 @@ interface MoodState {
     total: number;
     byEmoji: Record<MoodEmoji, number>;
     recentDays: Array<{ date: string; emoji: MoodEmoji }>;
-    mostFrequent: MoodEmoji;
+    mostFrequent: MoodEmoji | null;
   } | null;
   isLoading: boolean;
   error: string | null;
@@ -62,9 +62,13 @@ export const useMoodStore = create<MoodState>((set) => ({
         acc[mood.attributes.emoji] = (acc[mood.attributes.emoji] || 0) + 1;
         return acc;
       }, {} as Record<MoodEmoji, number>);
+     
+        let mostFrequent: MoodEmoji | null = null;
 
-      const mostFrequent = Object.entries(byEmoji)
-        .sort(([, a], [, b]) => b - a)[0][0] as MoodEmoji;
+        const entries = Object.entries(byEmoji);
+        if (entries.length > 0) {
+          mostFrequent = entries.sort(([, a], [, b]) => b - a)[0][0] as MoodEmoji;
+        }
 
       const recentDays = moods
         .sort((a: Mood, b: Mood) => 
