@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect } from 'react';
-import { format } from 'date-fns';
+import { format, getDaysInMonth, startOfMonth } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { MoodIcon } from '@/components/MoodIcon';
 import { useMoodStore } from '@/store/moodStore';
 import { useAuthStore } from '@/store/authStore';
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { motion } from 'framer-motion';
 import { getMoodLabel } from '@/utils/utils';
+import { MoodEmoji } from '@/types/mood';
 
 const COLORS = ['#FFBB28', '#00C49F', '#FF8042', '#8884D8', '#FF6B6B'];
 
@@ -20,7 +21,8 @@ interface PieDataItem {
 export default function StatsPage() {
   const { stats, isLoading, error, fetchStats } = useMoodStore();
   const { user } = useAuthStore();
-  const userId = `${user?.id}`
+  const userId = `${user?.id}`;
+
   useEffect(() => {
     if (userId) {
       fetchStats(userId);
@@ -67,10 +69,20 @@ export default function StatsPage() {
     value: count,
   }));
 
-  const barData = stats.recentDays.map((day) => ({
-    date: format(new Date(day.date), 'M/d', { locale: ko }),
-    emoji: day.emoji,
-  }));
+  // 이번 달의 날짜 배열 생성
+  const currentMonth = new Date();
+  const daysInMonth = getDaysInMonth(currentMonth);
+  const monthStart = startOfMonth(currentMonth);
+  const firstDayOfWeek = monthStart.getDay();
+
+  // 이번 달의 모든 날짜에 대한 기분 데이터 매핑
+  const moodMap = stats.recentDays.reduce((acc, day) => {
+    const date = new Date(day.date);
+    if (date.getMonth() === currentMonth.getMonth() && date.getFullYear() === currentMonth.getFullYear()) {
+      acc[date.getDate()] = day.emoji as MoodEmoji;
+    }
+    return acc;
+  }, {} as Record<number, MoodEmoji>);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
@@ -127,17 +139,42 @@ export default function StatsPage() {
               className="bg-purple-50 dark:bg-gray-700 p-6 rounded-xl shadow-sm"
             >
               <h2 className="text-lg font-semibold mb-4 text-purple-600 dark:text-purple-400">
-                최근 7일 감정 변화
+                이번 달 감정 달력
               </h2>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={barData}>
-                    <XAxis dataKey="date" stroke="#8884d8" />
-                    <YAxis stroke="#8884d8" />
-                    <Tooltip />
-                    <Bar dataKey="emoji" fill="#8884d8" />
-                  </BarChart>
-                </ResponsiveContainer>
+              <div className="grid grid-cols-7 gap-2">
+                {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
+                  <div
+                    key={day}
+                    className="text-center text-sm font-medium text-purple-600 dark:text-purple-400"
+                  >
+                    {day}
+                  </div>
+                ))}
+                {Array.from({ length: firstDayOfWeek }).map((_, index) => (
+                  <div key={`empty-${index}`} className="h-12" />
+                ))}
+                {Array.from({ length: daysInMonth }).map((_, index) => {
+                  const day = index + 1;
+                  const mood = moodMap[day];
+                  return (
+                    <div
+                      key={day}
+                      className={`h-12 flex items-center justify-center rounded-lg ${
+                        mood ? 'bg-white dark:bg-gray-800 shadow-sm' : 'bg-gray-100 dark:bg-gray-600'
+                      }`}
+                    >
+                      {mood ? (
+                        <MoodIcon
+                          emoji={mood}
+                          size={24}
+                          isSelected={true}
+                        />
+                      ) : (
+                        <span className="text-gray-400 dark:text-gray-500">{day}</span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </motion.div>
 
@@ -159,7 +196,7 @@ export default function StatsPage() {
                   />
                 </div>
                 <p className="text-2xl font-semibold text-purple-600 dark:text-purple-400">
-                  {stats.mostFrequent}
+                  {getMoodLabel(stats.mostFrequent)}
                 </p>
               </div>
             </motion.div>
