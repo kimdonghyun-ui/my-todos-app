@@ -18,14 +18,14 @@ export default function HomePage() {
   const [memo, setMemo] = useState('');
   const [selectedDate, setSelectedDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
 
-  const userId = `${user?.id}`
+
 
   useEffect(() => {
     
-    if (userId) {
-    fetchMoodByDate(selectedDate, userId);
-    }
-  }, [selectedDate, fetchMoodByDate, userId]);
+  if (user?.id) {
+    fetchMoodByDate(selectedDate, `${user?.id}`);
+  }
+  }, [selectedDate, fetchMoodByDate, user?.id]);
 
   useEffect(() => {
     if (todayMood) {
@@ -41,9 +41,9 @@ export default function HomePage() {
     if (!selectedEmoji) return;
     
     if (todayMood) {
-      await updateMood(todayMood.id, selectedEmoji, memo, userId);
+      await updateMood(todayMood.id, selectedEmoji, memo, `${user?.id}`);
     } else {
-      await saveMood(selectedEmoji, memo, selectedDate, userId);
+      await saveMood(selectedEmoji, memo, selectedDate, `${user?.id}`);
     }
   };
 
