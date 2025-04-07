@@ -188,14 +188,16 @@ export default function StatsPage() {
               </h2>
               <div className="flex items-center justify-center gap-4">
                 <div className="p-4 bg-white dark:bg-gray-800 rounded-full shadow-sm">
+                {stats.mostFrequent && (
                   <MoodIcon
                     emoji={stats.mostFrequent}
                     size={48}
                     isSelected={true}
                   />
+                )}
                 </div>
                 <p className="text-2xl font-semibold text-purple-600 dark:text-purple-400">
-                  {getMoodLabel(stats.mostFrequent)}
+                  {getMoodLabel(stats.mostFrequent || '')}
                 </p>
               </div>
             </motion.div>
