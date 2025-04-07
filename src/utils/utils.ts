@@ -1,5 +1,7 @@
 //utils/ (유틸리티 함수 폴더)
 
+import { MoodEmoji } from "@/types/mood";
+
 // 📌 개념:
 
 // - 작은 기능을 수행하는 순수 함수(pure function)들을 모아두는 폴더
@@ -97,3 +99,15 @@ export const isProtectedRoute = (
     };
     return map[path] || '페이지';
   };
+
+
+  export function getMoodLabel(emoji: string): string {
+    const map: Record<string, string> = {
+      laugh: '최고',
+      smile: '좋아',
+      meh: '보통',
+      frown: '나빠',
+      angry: '최악',
+    };
+    return map[emoji];
+  }

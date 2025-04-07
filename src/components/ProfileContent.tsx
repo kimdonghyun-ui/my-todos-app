@@ -57,9 +57,10 @@ export default function ProfileContent() {
   }, [isEditing, user]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
-      <div className="max-w-2xl mx-auto px-4 pt-24 pb-8">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
+      <main className="container mx-auto px-4 py-8 max-w-2xl">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
           <div className="flex flex-col items-center space-y-6">
             {/* 프로필 이미지 */}
             <div className="relative">
@@ -99,7 +100,7 @@ export default function ProfileContent() {
             </div>
 
             {/* 프로필 정보 */}
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-2xl">
               {isEditing ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
@@ -196,7 +197,7 @@ export default function ProfileContent() {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 } 

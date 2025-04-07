@@ -47,6 +47,29 @@ export default function Header({ showBackButton = false }: HeaderProps) {
           {accessToken && (
             <>
               <button
+                onClick={() => router.push('/history')}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                title="히스토리"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeWidth={2} d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path strokeWidth={2} d="M3 3v5h5"/><path strokeWidth={2} d="M12 7v5l4 2"/>
+                </svg>
+              </button>
+
+              <button
+                onClick={() => router.push('/stats')}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                title="통계"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeWidth={2} d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="15" y="5" width="4" height="12" rx="1"/><rect x="7" y="8" width="4" height="9" rx="1"/>
+                </svg>
+              </button>
+
+
+
+
+              <button
                 onClick={() => router.push('/profile')}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                 title="프로필"

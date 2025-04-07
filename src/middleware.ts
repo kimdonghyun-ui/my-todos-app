@@ -37,7 +37,8 @@ export const config = {
   matcher: [
     '/',              // protected
     '/profile',       // protected
-    '/users',         // protected
+    '/history',         // protected
+    '/stats',         // protected
     '/login',         // auth
   ],
 }; 
