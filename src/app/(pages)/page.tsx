@@ -22,8 +22,6 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!user?.id) return;
-    console.log(user);
-    console.log(user.id);
     fetchMoodByDate(selectedDate, String(user.id));
   }, [selectedDate, fetchMoodByDate, user?.id]);
 

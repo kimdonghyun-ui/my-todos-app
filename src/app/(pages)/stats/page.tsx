@@ -20,13 +20,12 @@ interface PieDataItem {
 export default function StatsPage() {
   const { stats, isLoading, error, fetchStats } = useMoodStore();
   const { user } = useAuthStore();
-  const userId = `${user?.id}`;
+  // const userId = `${user?.id}`;
 
   useEffect(() => {
-    if (userId) {
-      fetchStats(userId);
-    }
-  }, [fetchStats, userId]);
+    if (!user?.id) return;
+    fetchStats(`${user?.id}`);
+  }, [fetchStats, user?.id]);
 
   if (isLoading) {
     return (

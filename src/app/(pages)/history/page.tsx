@@ -11,13 +11,12 @@ import { motion } from 'framer-motion';
 export default function HistoryPage() {
   const { moods, isLoading, error, fetchMoods } = useMoodStore();
   const { user } = useAuthStore();
-  const userId = `${user?.id}`
+  // const userId = `${user?.id}`
 
   useEffect(() => {
-    if (userId) {
-      fetchMoods(userId);
-    }
-  }, [fetchMoods, userId]);
+    if (!user?.id) return;
+    fetchMoods(`${user?.id}`);
+  }, [fetchMoods, user?.id]);
 
   if (isLoading) {
     return (
