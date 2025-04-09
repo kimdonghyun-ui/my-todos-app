@@ -8,6 +8,8 @@ import { isProtectedRoute } from "@/utils/utils";
 import { useAuthStatus } from '@/hooks/useAuthStatus';
 import { performLogout } from "@/lib/auth";
 import { useThemeStore } from "@/store/themeStore";
+
+
 import Header from "./Header";
 
 export default function ClientLayout({

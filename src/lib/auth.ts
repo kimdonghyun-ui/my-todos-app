@@ -1,5 +1,6 @@
 import { logoutApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
+import { useWordStore } from "@/store/wordStore";
 import { removeLocalStorage } from "@/utils/utils";
 
 export async function performLogout() {
@@ -42,6 +43,8 @@ export async function performLogout() {
       action: "delete",
     }),
   });
+
+  useWordStore.persist.clearStorage() // useWordStore 로컬스토리지 초기화
 
   // Zustand 상태 초기화
   useAuthStore.setState({ accessToken: null, user: null });
