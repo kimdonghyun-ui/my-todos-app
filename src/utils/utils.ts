@@ -111,3 +111,21 @@ export const isProtectedRoute = (
     };
     return map[emoji];
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  export const speak = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US'; // 영어
+    speechSynthesis.speak(utterance);
+  };
