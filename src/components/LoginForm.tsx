@@ -21,8 +21,8 @@ export default function LoginForm() {
       <div className="max-w-2xl mx-auto px-4 pt-24 pb-8">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
           <div className="mb-8 text-center">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">오늘의 기분을 기록해볼까요?</h2>
-            <p className="text-gray-600 dark:text-gray-400">기분 한 줄, 나를 더 잘 알게 돼요.</p>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">단어의 세계로</h2>
+            <p className="text-gray-600 dark:text-gray-400">매일 새로운 단어와 함께 성장하는 여정을 시작하세요</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
