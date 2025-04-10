@@ -1,6 +1,7 @@
 import { logoutApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { useWordStore } from "@/store/wordStore";
+import { useLevelStore } from "@/store/levelStore";
 import { removeLocalStorage } from "@/utils/utils";
 
 export async function performLogout() {
@@ -48,6 +49,7 @@ export async function performLogout() {
 
   // Zustand 상태 초기화
   useAuthStore.setState({ accessToken: null, user: null });
+  useLevelStore.setState({ level: 'easy' });
 
   // 로컬스토리지 제거
   removeLocalStorage("userInfo");

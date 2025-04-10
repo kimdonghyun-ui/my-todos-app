@@ -15,7 +15,7 @@ export default function WordCard({ word, isFavorite, onFavoriteClick, onAudioCli
   return (
     <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-3xl font-bold">{word.word}</h2>
+        <h2 className="text-3xl font-bold">{word.attributes.word}</h2>
         <div className="flex gap-2">
           <button onClick={onAudioClick} className="p-2 hover:bg-gray-100 rounded-full">
             <SpeakerWaveIcon className="w-6 h-6" />
@@ -31,11 +31,11 @@ export default function WordCard({ word, isFavorite, onFavoriteClick, onAudioCli
       </div>
       
       <div className="mb-4">
-        <p className="text-gray-600">{word.phonetic}</p>
+        <p className="text-gray-600">{word.attributes.phonetic}</p>
       </div>
 
       <div className="space-y-4">
-        {word.meanings.map((meaning, index) => (
+        {word.attributes.meanings.map((meaning, index) => (
           <div key={index} className="border-t pt-4">
             <p className="text-lg font-semibold text-gray-800">{meaning.partOfSpeech}</p>
             <ul className="mt-2 space-y-2">

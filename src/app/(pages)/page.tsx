@@ -38,7 +38,7 @@ export default function Home() {
           word={word}
           isFavorite={isFavorite(word.id)}
           onFavoriteClick={() => toggleFavorite(word.id)}
-          onAudioClick={() => speak(word.word)}
+          onAudioClick={() => speak(word.attributes.word)}
         />
       )}
     </main>

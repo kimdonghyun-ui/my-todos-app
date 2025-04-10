@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Word, Level } from '@/types/word';
+import { fetchApi } from '@/lib/fetchApi';
+import { useLevelStore } from './levelStore';
 
 interface WordState {
   word: Word | null;
@@ -20,28 +22,31 @@ export const useWordStore = create<WordState>()(
       error: null,
       favorites: [],
 
-      fetchTodayWord: async (level?: Level) => {
+      fetchTodayWord: async () => {
+        const level = useLevelStore.getState().level;
         set({ loading: true, error: null });
         try {
           // TODO: API 호출로 교체 가능
-          const mockWord: Word = {
-            id: 1,
-            word: 'serendipity',
-            phonetic: '[ˌserənˈdɪpəti]',
-            meanings: [
-              {
-                partOfSpeech: 'noun',
-                definitions: [
-                  {
-                    definition: 'the occurrence of events by chance in a happy or beneficial way',
-                    example: 'Finding this beautiful cafe was pure serendipity.'
-                  }
-                ]
-              }
-            ],
-            // audioUrl: 'https://api.dictionaryapi.dev/media/pronunciations/serendipity.mp3'
-          };
-          set({ word: mockWord, loading: false });
+          // const mockWord: Word = {
+          //   id: 1,
+            
+          //   word: 'serendipity',
+          //   phonetic: '[ˌserənˈdɪpəti]',
+          //   meanings: [
+          //     {
+          //       partOfSpeech: 'noun',
+          //       definitions: [
+          //         {
+          //           definition: 'the occurrence of events by chance in a happy or beneficial way',
+          //           example: 'Finding this beautiful cafe was pure serendipity.'
+          //         }
+          //       ]
+          //     }
+          //   ],
+          // };
+
+          const response = await fetchApi<{ data: Word[] }>(`/words?filters[level][$eq]=${level}&populate[meanings][populate]=definitions`, { method: 'GET' });
+          set({ word: response.data[0], loading: false });
         } catch (error) {
           set({ error: 'Failed to fetch word', loading: false });
         }

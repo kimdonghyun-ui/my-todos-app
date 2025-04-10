@@ -2,7 +2,14 @@
 
 import { useLevelStore } from '@/store/levelStore';
 
-const levels: ('초급' | '중급' | '고급')[] = ['초급', '중급', '고급'];
+const levels: ('easy' | 'medium' | 'hard')[] = ['easy', 'medium', 'hard'];
+
+// 화면에 보여줄 한글 레이블
+const levelLabels: Record<'easy' | 'medium' | 'hard', string> = {
+  easy: '초급',
+  medium: '중급',
+  hard: '고급',
+};
 
 export default function LevelSelector() {
   const { level, setLevel } = useLevelStore();
@@ -21,7 +28,7 @@ export default function LevelSelector() {
                 : 'bg-white text-gray-600 border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'} 
               transition`}
           >
-            {lv}
+            {levelLabels[lv]}
           </button>
         ))}
       </div>

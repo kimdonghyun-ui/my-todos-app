@@ -1,7 +1,7 @@
 export enum Level {
-  EASY = 'EASY',
-  MEDIUM = 'MEDIUM',
-  HARD = 'HARD'
+    easy = 'easy',
+    medium = 'medium',
+    hard = 'hard'
 }
 
 export interface Definition {
@@ -16,10 +16,12 @@ export interface Meaning {
 
 export interface Word {
   id: number
-  word: string
-  phonetic: string
-  meanings: Meaning[]
-  audioUrl?: string
+  attributes: {
+    word: string
+    phonetic: string
+    meanings: Meaning[],
+  };
+
 }
 
 export interface WordCardProps {
