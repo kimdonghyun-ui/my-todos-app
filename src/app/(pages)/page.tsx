@@ -4,14 +4,16 @@ import { useEffect } from 'react'
 import { useWordStore } from '@/store/wordStore'
 import WordCard from '@/components/WordCard'
 import Header from '@/components/layout/Header'
-
 import { speak } from '@/utils/utils'
+import { useLevelStore } from '@/store/levelStore'
+
 export default function Home() {
-  const { word, loading, error, fetchTodayWord, toggleFavorite, isFavorite } = useWordStore()
+  const { word, loading, error, fetchTodayWord, toggleFavorite, isFavorite } = useWordStore();
+  const { level } = useLevelStore();
 
   useEffect(() => {
     fetchTodayWord()
-  }, [fetchTodayWord])
+  }, [fetchTodayWord, level])
 
   if (loading) {
     return (

@@ -129,3 +129,38 @@ export const isProtectedRoute = (
     utterance.lang = 'en-US'; // 영어
     speechSynthesis.speak(utterance);
   };
+
+
+
+  export function getTodayKST(): string {
+    const now = new Date();
+    // UTC -> KST (+9시간)
+    const offset = 9 * 60 * 60 * 1000;
+    const kstDate = new Date(now.getTime() + offset);
+    return kstDate.toISOString().split('T')[0];
+  }
+
+
+
+  // 오늘의 단어 로컬스토리지에 키 쌓이는거 삭제하는 함수
+  export function clearOldWordCache() {
+    const today = getTodayKST(); // ✅ KST 날짜로 비교!
+    const levels = ['easy', 'medium', 'hard'];
+  
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+  
+      // "easy-2025-04-10" 같은 형식인 경우만 필터
+      const isLevelKey = levels.some((level) => key.startsWith(level + '-'));
+  
+      if (isLevelKey) {
+        const datePart = key.split('-').slice(1).join('-'); // ✅ 여기 수정
+        if (datePart !== today) {
+          localStorage.removeItem(key);
+          console.log(`🧹 오래된 캐시 삭제됨: ${key}`);
+        }
+      }
+    }
+  }
+  

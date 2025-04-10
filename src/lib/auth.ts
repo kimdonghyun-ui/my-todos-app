@@ -45,15 +45,21 @@ export async function performLogout() {
     }),
   });
 
-  useWordStore.persist.clearStorage() // useWordStore 로컬스토리지 초기화
+  //##### 스토어 초기화(Zustand) 시작#####
+  //##### 스토어 초기화(Zustand) 시작#####
 
-  // Zustand 상태 초기화
-  useAuthStore.setState({ accessToken: null, user: null });
-  useLevelStore.setState({ level: 'easy' });
+  //##useWordStore##
+  useWordStore.getState().reset(); //localStorage + 메모리 상태 초기화
 
-  // 로컬스토리지 제거
-  removeLocalStorage("userInfo");
+  //##useLevelStore##
+  useLevelStore.getState().reset(); //localStorage + 메모리 상태 초기화
 
+  //##useAuthStore##
+  useAuthStore.getState().reset(); //localStorage + 메모리 상태 초기화
+
+  //##### 스토어 초기화(Zustand) 끝#####
+  //##### 스토어 초기화(Zustand) 끝#####
+  
 }
 
 

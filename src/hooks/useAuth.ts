@@ -27,7 +27,7 @@ export function useAuth(): UseAuthReturn {
         const { jwt, user } = response
         setAccessToken(jwt);//zustand 에 accessToken 저장
         setUser(user);//zustand 에 user 저장
-        setLocalStorage<User>("userInfo", user);//로컬스토리지에 user 저장
+        // setLocalStorage<User>("userInfo", user);//로컬스토리지에 user 저장
 
         // ✅ 2. Next.js API 호출하여 쿠키 저장 (쿠키 이름을 동적으로 전달)
         const resCookie = await fetch("/api/set-cookie", {
@@ -80,7 +80,7 @@ export function useAuth(): UseAuthReturn {
         const user = await profileUpdateApi(id,credentials); // ✅ API 호출
         alert("프로필 업데이트 성공");
         setUser(user);//zustand 에 user 저장
-        setLocalStorage<User>("userInfo", user);//로컬스토리지에 user 저장
+        // setLocalStorage<User>("userInfo", user);//로컬스토리지에 user 저장
     } catch (error) {
       console.error("Login failed:", error);
     }

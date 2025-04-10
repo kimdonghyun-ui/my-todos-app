@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter, usePathname } from "next/navigation";
 import { protectedRoutes } from "@/lib/constants/auth";
-import { isProtectedRoute } from "@/utils/utils";
+import { clearOldWordCache, isProtectedRoute } from "@/utils/utils";
 import { useAuthStatus } from '@/hooks/useAuthStatus';
 import { performLogout } from "@/lib/auth";
 import { useThemeStore } from "@/store/themeStore";
@@ -23,6 +23,12 @@ export default function ClientLayout({
     const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
   const { isInitialized } = useAuthStatus();
+
+
+
+  useEffect(() => {
+    clearOldWordCache();
+  }, []);
 
   useEffect(() => {
     if (isDarkMode) {
