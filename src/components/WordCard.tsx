@@ -13,37 +13,52 @@ interface WordCardProps {
 
 export default function WordCard({ word, isFavorite, onFavoriteClick, onAudioClick }: WordCardProps) {
   return (
-    <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
-      <div className="flex justify-between items-start mb-4">
-        <h2 className="text-3xl font-bold">{word.attributes.word}</h2>
-        <div className="flex gap-2">
-          <button onClick={onAudioClick} className="p-2 hover:bg-gray-100 rounded-full">
-            <SpeakerWaveIcon className="w-6 h-6" />
+    <div className="w-full max-w-2xl p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl backdrop-blur-sm bg-opacity-90">
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400">
+            {word.attributes.word}
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 mt-2 text-lg">{word.attributes.phonetic}</p>
+        </div>
+        <div className="flex gap-3">
+          <button 
+            onClick={onAudioClick} 
+            className="p-3 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded-full transition-colors duration-200"
+          >
+            <SpeakerWaveIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           </button>
-          <button onClick={onFavoriteClick} className="p-2 hover:bg-gray-100 rounded-full">
+          <button 
+            onClick={onFavoriteClick} 
+            className="p-3 hover:bg-pink-50 dark:hover:bg-pink-900/50 rounded-full transition-colors duration-200"
+          >
             {isFavorite ? (
-              <HeartIconSolid className="w-6 h-6 text-red-500" />
+              <HeartIconSolid className="w-6 h-6 text-pink-500 dark:text-pink-400" />
             ) : (
-              <HeartIcon className="w-6 h-6" />
+              <HeartIcon className="w-6 h-6 text-gray-400 dark:text-gray-500" />
             )}
           </button>
         </div>
       </div>
-      
-      <div className="mb-4">
-        <p className="text-gray-600">{word.attributes.phonetic}</p>
-      </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {word.attributes.meanings.map((meaning, index) => (
-          <div key={index} className="border-t pt-4">
-            <p className="text-lg font-semibold text-gray-800">{meaning.partOfSpeech}</p>
-            <ul className="mt-2 space-y-2">
+          <div key={index} className="border-t border-gray-100 dark:border-gray-700 pt-6">
+            <div className="flex items-center mb-4">
+              <span className="px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50 rounded-full">
+                {meaning.partOfSpeech}
+              </span>
+            </div>
+            <ul className="space-y-4">
               {meaning.definitions.map((def, defIndex) => (
-                <li key={defIndex} className="text-gray-700">
-                  {def.definition}
+                <li key={defIndex} className="group">
+                  <p className="text-gray-800 dark:text-gray-200 text-lg leading-relaxed">
+                    {def.definition}
+                  </p>
                   {def.example && (
-                    <p className="text-gray-500 italic mt-1">"{def.example}"</p>
+                    <p className="text-gray-500 dark:text-gray-400 mt-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700 italic group-hover:border-blue-300 dark:group-hover:border-blue-500 transition-colors duration-200">
+                      "{def.example}"
+                    </p>
                   )}
                 </li>
               ))}
