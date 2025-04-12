@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useWordStore } from '@/store/wordStore'
 import { useLevelStore } from '@/store/levelStore'
 import { cn } from '@/lib/utils'
@@ -14,6 +14,7 @@ import {
   Pause,
   Play,
 } from 'lucide-react'
+import { speak } from '@/utils/utils'
 
 export default function FlashcardPage() {
   const { words, fetchWordsByLevel, toggleFavorite, isFavorite } = useWordStore()
@@ -26,18 +27,11 @@ export default function FlashcardPage() {
 
   const currentWord = words?.[currentIndex]?.attributes
 
-  const speak = (text: string) => {
-    if (!voiceEnabled) return
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = 'en-US'
-    speechSynthesis.speak(utterance)
-  }
-
-  const handleNext = () => {
-    if (!words) return
-    setCurrentIndex((prev) => (prev + 1) % words.length)
-    setShowDefinition(false)
-  }
+  const handleNext = useCallback(() => {
+    if (!words) return;
+    setCurrentIndex((prev) => (prev + 1) % words.length);
+    setShowDefinition(false);
+  }, [words]);
 
   const handleShowDefinition = () => {
     setShowDefinition(true)
@@ -65,7 +59,7 @@ export default function FlashcardPage() {
     }, showDefinition ? 3500 : 2000)
 
     return () => clearTimeout(timer)
-  }, [autoPlay, showDefinition, words, currentIndex, voiceEnabled])
+  }, [autoPlay, showDefinition, words, currentIndex, voiceEnabled, currentWord?.word, handleNext])
 
   if (!words || words.length === 0 || !currentWord) {
     return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading...</div>

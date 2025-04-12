@@ -19,6 +19,19 @@ interface WordState {
   reset: () => void;
 }
 
+interface WordFavorite {
+  id: number;
+  attributes: {
+    word: {
+      data: {
+        id: number;
+      };
+    };
+  };
+}
+
+
+
 export const useWordStore = create<WordState>()(
   persist(
     (set, get) => ({
@@ -62,7 +75,7 @@ export const useWordStore = create<WordState>()(
           
           console.log('현재 단어:', useWordStore.getState().word);
 
-        } catch (error) {
+        } catch {
           set({ error: 'Failed to fetch word', loading: false });
         }
       },
@@ -83,7 +96,7 @@ export const useWordStore = create<WordState>()(
           if (Array.isArray(data)) {
             set({ words: response.data, loading: false });
           }
-        } catch (error) {
+        } catch {
           set({ error: '단어 목록 불러오기 실패', loading: false });
         } finally {
           set({ loading: false });
@@ -97,7 +110,7 @@ export const useWordStore = create<WordState>()(
         try {
           if (isAlreadyFavorite) {
             // 1. 해당 wordId와 연결된 favorite의 id를 먼저 찾기
-            const res = await fetchApi<{ data: any[] }>(
+            const res = await fetchApi<{ data: WordFavorite[] }>(
               `/word-favorites?filters[word][id][$eq]=${wordId}`
             );
             const favoriteId = res.data[0]?.id;
@@ -124,7 +137,7 @@ export const useWordStore = create<WordState>()(
       
       fetchFavoritesFromServer: async () => {
         try {
-          const response = await fetchApi<{ data: any[] }>('/word-favorites?populate=word');
+          const response = await fetchApi<{ data: WordFavorite[] }>('/word-favorites?populate=word');
           const ids = response.data.map(item => item.attributes.word.data.id);
           set({ favorites: ids });
         } catch (err) {

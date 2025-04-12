@@ -2,7 +2,7 @@ import { logoutApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { useWordStore } from "@/store/wordStore";
 import { useLevelStore } from "@/store/levelStore";
-import { removeLocalStorage } from "@/utils/utils";
+
 
 export async function performLogout() {
 

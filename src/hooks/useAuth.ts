@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 
 import { useRouter } from 'next/navigation';
-import { LoginCredentials, RegisterCredentials, User, ProfileUpdateCredentials } from '@/types/auth';
+import { LoginCredentials, RegisterCredentials, ProfileUpdateCredentials } from '@/types/auth';
 
 import { useAuthStore } from "@/store/authStore";
 import { loginApi, registerApi, profileUpdateApi } from '@/lib/api';
-import { setLocalStorage } from '@/utils/utils';
+
 
 // const API_URL = 'http://localhost:1337/api';
 
@@ -80,7 +80,6 @@ export function useAuth(): UseAuthReturn {
         const user = await profileUpdateApi(id,credentials); // ✅ API 호출
         alert("프로필 업데이트 성공");
         setUser(user);//zustand 에 user 저장
-        // setLocalStorage<User>("userInfo", user);//로컬스토리지에 user 저장
     } catch (error) {
       console.error("Login failed:", error);
     }

@@ -56,9 +56,9 @@ export default function WordCard({ word, isFavorite, onFavoriteClick, onAudioCli
                     {def.definition}
                   </p>
                   {def.example && (
-                    <p className="text-gray-500 dark:text-gray-400 mt-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700 italic group-hover:border-blue-300 dark:group-hover:border-blue-500 transition-colors duration-200">
-                      "{def.example}"
-                    </p>
+                    <div className="text-gray-600 dark:text-gray-300 mt-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700 italic group-hover:border-blue-300 dark:group-hover:border-blue-500 transition-colors duration-200">
+                      &ldquo;{def.example}&rdquo;
+                    </div>
                   )}
                 </li>
               ))}

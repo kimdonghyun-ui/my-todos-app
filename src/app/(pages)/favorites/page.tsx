@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useWordStore } from '@/store/wordStore'
 import { useLevelStore } from '@/store/levelStore'
 import { speak } from '@/utils/utils'
@@ -10,16 +10,18 @@ import {
 } from 'lucide-react'
 
 export default function FavoritesPage() {
-  const { favorites, fetchFavoritesFromServer, words, fetchWordsByLevel, toggleFavorite } = useWordStore()
+  const { favorites, fetchFavoritesFromServer, toggleFavorite } = useWordStore()
+  const { words, fetchWordsByLevel } = useWordStore()
   const level = useLevelStore((state) => state.level)
-  const [voiceEnabled, setVoiceEnabled] = useState(true)
+
   
   useEffect(() => {
     fetchFavoritesFromServer()
-  }, [])
+  }, [fetchFavoritesFromServer])
+
   useEffect(() => {
     fetchWordsByLevel()
-  }, [level])
+  }, [fetchWordsByLevel, level])
 
   
 

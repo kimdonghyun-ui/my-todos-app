@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
-import { getLocalStorage } from "@/utils/utils";
-import { User } from '@/types/auth';
+
 
 interface UseAuthStatusReturn {
 	isInitialized: boolean;
