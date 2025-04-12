@@ -7,10 +7,12 @@ import { getTodayKST } from '@/utils/utils';
 
 interface WordState {
   word: Word | null;
+  words: Word[] | null;
   loading: boolean;
   error: string | null;
   favorites: number[];
   fetchTodayWord: (level?: Level) => Promise<void>;
+  fetchWordsByLevel: (level?: Level) => Promise<void>;
   toggleFavorite: (wordId: number) => void;
   isFavorite: (wordId: number) => boolean;
   reset: () => void;
@@ -20,6 +22,7 @@ export const useWordStore = create<WordState>()(
   persist(
     (set, get) => ({
       word: null,
+      words: null,
       loading: false,
       error: null,
       favorites: [],
@@ -63,6 +66,33 @@ export const useWordStore = create<WordState>()(
         }
       },
 
+
+
+
+      fetchWordsByLevel: async () => {
+        set({ loading: true, error: null });
+        try {
+          const level = useLevelStore.getState().level;// 레벨 가져오기
+          // if (!level) {return;}
+          // // API 요청
+          const response = await fetchApi<{ data: Word[] }>(`/words?filters[level][$eq]=${level}&populate[meanings][populate]=definitions`, { method: 'GET' });
+          
+
+          const data = response.data;
+          if (Array.isArray(data)) {
+            set({ words: response.data, loading: false });
+          }
+        } catch (error) {
+          set({ error: '단어 목록 불러오기 실패', loading: false });
+        } finally {
+          set({ loading: false });
+        }
+      },
+      
+
+
+
+
       toggleFavorite: (wordId: number) => {
         const { favorites } = get();
         if (favorites.includes(wordId)) {
@@ -80,6 +110,7 @@ export const useWordStore = create<WordState>()(
       reset: () => {
         set({
           word: null,
+          words: null,
           loading: false,
           error: null,
           favorites: [],
