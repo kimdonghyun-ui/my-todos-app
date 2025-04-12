@@ -4,6 +4,7 @@ import { Word, Level } from '@/types/word';
 import { fetchApi } from '@/lib/fetchApi';
 import { useLevelStore } from './levelStore';
 import { getTodayKST } from '@/utils/utils';
+import { useAuthStore } from './authStore';
 
 interface WordState {
   word: Word | null;
@@ -136,12 +137,15 @@ export const useWordStore = create<WordState>()(
       },
       
       fetchFavoritesFromServer: async () => {
+        set({ loading: true, error: null });
         try {
-          const response = await fetchApi<{ data: WordFavorite[] }>('/word-favorites?populate=word');
+          const response = await fetchApi<{ data: WordFavorite[] }>(`/word-favorites?filters[user][id][$eq]=${useAuthStore.getState().user?.id}`);
           const ids = response.data.map(item => item.attributes.word.data.id);
           set({ favorites: ids });
-        } catch (err) {
-          console.error('즐겨찾기 불러오기 실패', err);
+        } catch {
+          set({ error: '즐겨찾기 불러오기 실패', loading: false });
+        } finally {
+          set({ loading: false });
         }
       },
       
