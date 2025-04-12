@@ -5,11 +5,12 @@ import { useWordStore } from '@/store/wordStore'
 import { useLevelStore } from '@/store/levelStore'
 import { speak } from '@/utils/utils'
 import {
-  Volume2
+  Volume2,
+  Trash2
 } from 'lucide-react'
 
 export default function FavoritesPage() {
-  const { favorites, fetchFavoritesFromServer, words, fetchWordsByLevel } = useWordStore()
+  const { favorites, fetchFavoritesFromServer, words, fetchWordsByLevel, toggleFavorite } = useWordStore()
   const level = useLevelStore((state) => state.level)
   const [voiceEnabled, setVoiceEnabled] = useState(true)
   
@@ -21,7 +22,7 @@ export default function FavoritesPage() {
   }, [level])
 
   
-  console.log(words,favorites)
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
@@ -42,15 +43,21 @@ export default function FavoritesPage() {
                       {word.attributes.meanings[0]?.definitions[0]?.definition || '정의 없음'}
                     </p>
                   </div>
-
-                  <button
-                    onClick={() => speak(word.attributes.word)}
-                    className="p-1.5 rounded-full bg-white shadow hover:scale-105 transition"
-                  >
-                    <Volume2 className="w-4 h-4 text-indigo-500" />
-                  </button>
-
-
+      
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => speak(word.attributes.word)}
+                      className="p-1.5 rounded-full bg-white shadow hover:scale-105 transition"
+                    >
+                      <Volume2 className="w-4 h-4 text-indigo-500" />
+                    </button>
+                    <button
+                      onClick={() => toggleFavorite(word.id)}
+                      className="p-1.5 rounded-full bg-white shadow hover:scale-105 transition"
+                    >
+                      <Trash2 className="w-4 h-4 text-indigo-500" />
+                    </button>
+                  </div>
                 </div>
               </li>
             ))}
