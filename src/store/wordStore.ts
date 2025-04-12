@@ -13,7 +13,8 @@ interface WordState {
   favorites: number[];
   fetchTodayWord: (level?: Level) => Promise<void>;
   fetchWordsByLevel: (level?: Level) => Promise<void>;
-  toggleFavorite: (wordId: number) => void;
+  toggleFavorite: (wordId: number) => Promise<void>;   // 기존엔 동기 함수였음
+  fetchFavoritesFromServer: () => Promise<void>;       // 서버에서 즐겨찾기 불러오기
   isFavorite: (wordId: number) => boolean;
   reset: () => void;
 }
@@ -89,18 +90,59 @@ export const useWordStore = create<WordState>()(
         }
       },
       
-
-
-
-
-      toggleFavorite: (wordId: number) => {
+      toggleFavorite: async (wordId: number) => {
         const { favorites } = get();
-        if (favorites.includes(wordId)) {
-          set({ favorites: favorites.filter(id => id !== wordId) });
-        } else {
-          set({ favorites: [...favorites, wordId] });
+        const isAlreadyFavorite = favorites.includes(wordId);
+      
+        try {
+          if (isAlreadyFavorite) {
+            // 1. 해당 wordId와 연결된 favorite의 id를 먼저 찾기
+            const res = await fetchApi<{ data: any[] }>(
+              `/word-favorites?filters[word][id][$eq]=${wordId}`
+            );
+            const favoriteId = res.data[0]?.id;
+      
+            if (favoriteId) {
+              // 2. 해당 즐겨찾기 ID로 삭제 요청
+              await fetchApi(`/word-favorites/${favoriteId}`, {
+                method: 'DELETE',
+              });
+              set({ favorites: favorites.filter((id) => id !== wordId) });
+            }
+          } else {
+            // 추가
+            await fetchApi('/word-favorites', {
+              method: 'POST',
+              body: JSON.stringify({ data: { word: wordId } }),
+            });
+            set({ favorites: [...favorites, wordId] });
+          }
+        } catch (err) {
+          console.error('즐겨찾기 처리 실패', err);
         }
       },
+      
+      fetchFavoritesFromServer: async () => {
+        try {
+          const response = await fetchApi<{ data: any[] }>('/word-favorites?populate=word');
+          const ids = response.data.map(item => item.attributes.word.data.id);
+          set({ favorites: ids });
+        } catch (err) {
+          console.error('즐겨찾기 불러오기 실패', err);
+        }
+      },
+      
+
+
+
+      // toggleFavorite: (wordId: number) => {
+      //   const { favorites } = get();
+      //   if (favorites.includes(wordId)) {
+      //     set({ favorites: favorites.filter(id => id !== wordId) });
+      //   } else {
+      //     set({ favorites: [...favorites, wordId] });
+      //   }
+      // },
 
       isFavorite: (wordId: number) => {
         return get().favorites.includes(wordId);

@@ -7,7 +7,7 @@ import DarkModeToggle from '../DarkModeToggle';
 import { usePathname } from 'next/navigation';
 import { getTitleFromPath } from '@/utils/utils';
 import LevelSelector from '../LevelSelector';
-import { BookCheck } from 'lucide-react';
+import { BookCheck, Star } from 'lucide-react';
 
 interface HeaderProps {
   showBackButton?: boolean;
@@ -56,6 +56,13 @@ export default function Header({ showBackButton = false }: HeaderProps) {
                 <BookCheck />
               </button>
 
+              <button
+                onClick={() => router.push('/favorites')}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                title="즐겨찾기"
+              >
+                <Star />
+              </button>
               {/* <button
                 onClick={() => router.push('/stats')}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"

@@ -38,6 +38,7 @@ export const config = {
     '/',              // protected
     '/profile',       // protected
     '/flashcard',         // protected
+    '/favorites',         // protected
     '/login',         // auth
   ],
 }; 
