@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter, usePathname } from "next/navigation";
 import { protectedRoutes } from "@/lib/constants/auth";
-import { clearOldWordCache, isProtectedRoute } from "@/utils/utils";
+import { isProtectedRoute } from "@/utils/utils";
 import { useAuthStatus } from '@/hooks/useAuthStatus';
 import { performLogout } from "@/lib/auth";
 import { useThemeStore } from "@/store/themeStore";
@@ -27,7 +27,7 @@ export default function ClientLayout({
 
 
   useEffect(() => {
-    clearOldWordCache();
+    
   }, []);
 
   useEffect(() => {

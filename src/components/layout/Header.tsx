@@ -6,7 +6,7 @@ import { useAuthStore } from '@/store/authStore';
 import DarkModeToggle from '../DarkModeToggle';
 import { usePathname } from 'next/navigation';
 import { getTitleFromPath } from '@/utils/utils';
-import LevelSelector from '../LevelSelector';
+
 import { BookCheck, Star } from 'lucide-react';
 
 interface HeaderProps {
@@ -97,9 +97,6 @@ export default function Header({ showBackButton = false }: HeaderProps) {
             </>
           )}
         </div>
-      </div>
-      <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-        <LevelSelector />
       </div>
     </header>
   );

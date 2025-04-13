@@ -1,7 +1,5 @@
 import { logoutApi } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
-import { useWordStore } from "@/store/wordStore";
-import { useLevelStore } from "@/store/levelStore";
 
 
 export async function performLogout() {
@@ -48,11 +46,11 @@ export async function performLogout() {
   //##### 스토어 초기화(Zustand) 시작#####
   //##### 스토어 초기화(Zustand) 시작#####
 
-  //##useWordStore##
-  useWordStore.getState().reset(); //localStorage + 메모리 상태 초기화
+  // //##useWordStore##
+  // useWordStore.getState().reset(); //localStorage + 메모리 상태 초기화
 
-  //##useLevelStore##
-  useLevelStore.getState().reset(); //localStorage + 메모리 상태 초기화
+  // //##useLevelStore##
+  // useLevelStore.getState().reset(); //localStorage + 메모리 상태 초기화
 
   //##useAuthStore##
   useAuthStore.getState().reset(); //localStorage + 메모리 상태 초기화

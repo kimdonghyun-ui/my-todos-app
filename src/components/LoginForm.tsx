@@ -1,8 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useAuth } from '@/hooks/useAuth';
+
+const loginMessages = [
+  {
+    title: '지출도 추억이 된다면',
+    subtitle: '하루하루의 소비를 기록하며, 나만의 재정 이야기를 시작해보세요',
+  },
+  {
+    title: '지출 관리, 더 쉽게',
+    subtitle: '매일의 수입과 지출을 한눈에. 당신만의 스마트 가계부를 시작하세요',
+  },
+  {
+    title: '돈의 흐름을 기록하세요',
+    subtitle: '작은 소비도 소중하게. 당신의 일상을 숫자로 담아보세요',
+  },
+]
 
 export default function LoginForm() {
   const [identifier, setIdentifier] = useState('hello@naver.com');
@@ -10,19 +25,28 @@ export default function LoginForm() {
   const { accessToken } = useAuthStore();
   const isLoading = !!accessToken;
   const { handleLogin } = useAuth();
+  const [message, setMessage] = useState(loginMessages[0])
+
   
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await handleLogin({ identifier, password });
   };
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * loginMessages.length)
+    setMessage(loginMessages[randomIndex])
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
       <div className="max-w-2xl mx-auto px-4 pt-24 pb-8">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
           <div className="mb-8 text-center">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">단어의 세계로</h2>
-            <p className="text-gray-600 dark:text-gray-400">매일 새로운 단어와 함께 성장하는 여정을 시작하세요</p>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">{message.title}</h2>
+            <p className="text-gray-600 dark:text-gray-400">{message.subtitle}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
