@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useWordStore } from '@/store/wordStore'
 import { useLevelStore } from '@/store/levelStore'
+import { useAuthStore } from '@/store/authStore'
 import { speak } from '@/utils/utils'
 import {
   Volume2,
@@ -13,14 +14,14 @@ export default function FavoritesPage() {
   const { favorites, fetchFavoritesFromServer, toggleFavorite } = useWordStore()
   const { words, fetchWordsByLevel } = useWordStore()
   const level = useLevelStore((state) => state.level)
-
+  const userId = useAuthStore((state) => state.user?.id)
   
   useEffect(() => {
-    fetchFavoritesFromServer()
-  }, [fetchFavoritesFromServer])
+    fetchFavoritesFromServer(userId ?? null)
+  }, [fetchFavoritesFromServer, userId])
 
   useEffect(() => {
-    fetchWordsByLevel()
+    fetchWordsByLevel(level)
   }, [fetchWordsByLevel, level])
 
   

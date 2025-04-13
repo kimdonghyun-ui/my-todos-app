@@ -41,7 +41,7 @@ export default function FlashcardPage() {
   }
 
   useEffect(() => {
-    fetchWordsByLevel()
+    fetchWordsByLevel(level)
   }, [fetchWordsByLevel, level])
 
   useEffect(() => {

@@ -6,14 +6,17 @@ import WordCard from '@/components/WordCard'
 import Header from '@/components/layout/Header'
 import { speak } from '@/utils/utils'
 import { useLevelStore } from '@/store/levelStore'
+import { useAuthStore } from '@/store/authStore'
 
 export default function Home() {
   const { word, loading, error, fetchTodayWord, toggleFavorite, isFavorite } = useWordStore();
   const { level } = useLevelStore();
+  const { user } = useAuthStore();
+
 
   useEffect(() => {
-    fetchTodayWord()
-  }, [fetchTodayWord, level])
+    fetchTodayWord(level, user?.id ?? null);
+  }, [fetchTodayWord, level, user])
 
   if (loading) {
     return (

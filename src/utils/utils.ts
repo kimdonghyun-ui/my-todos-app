@@ -144,18 +144,18 @@ export const isProtectedRoute = (
 
   // 오늘의 단어 로컬스토리지에 키 쌓이는거 삭제하는 함수
   export function clearOldWordCache() {
-    const today = getTodayKST(); // ✅ KST 날짜로 비교!
+    const today = getTodayKST(); // ex: '2025-04-10'
     const levels = ['easy', 'medium', 'hard'];
   
-    for (let i = 0; i < localStorage.length; i++) {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
       const key = localStorage.key(i);
       if (!key) continue;
   
-      // "easy-2025-04-10" 같은 형식인 경우만 필터
-      const isLevelKey = levels.some((level) => key.startsWith(level + '-'));
+      const parts = key.split('-'); // e.g., ['easy', '13', '2025', '04', '08']
+      const isLevelKey = levels.includes(parts[0]);
   
-      if (isLevelKey) {
-        const datePart = key.split('-').slice(1).join('-'); // ✅ 여기 수정
+      if (isLevelKey && parts.length >= 4) {
+        const datePart = parts.slice(-3).join('-'); // '2025-04-08'
         if (datePart !== today) {
           localStorage.removeItem(key);
           console.log(`🧹 오래된 캐시 삭제됨: ${key}`);
@@ -163,4 +163,5 @@ export const isProtectedRoute = (
       }
     }
   }
+  
   

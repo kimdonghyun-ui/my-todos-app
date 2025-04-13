@@ -1,4 +1,3 @@
-// src/store/levelStore.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -15,7 +14,6 @@ export const useLevelStore = create(
     (set) => ({
       level: 'easy',
       setLevel: (level) => set({ level }),
-      // ✅ 상태 초기화 함수 추가
       reset: () => {
         set({
           level: 'easy'
@@ -24,7 +22,7 @@ export const useLevelStore = create(
       },
     }),
     {
-      name: 'selected-level', // 🔐 로컬스토리지 키
+      name: 'level-store',
     }
   )
 );
