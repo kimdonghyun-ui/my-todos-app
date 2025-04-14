@@ -45,7 +45,7 @@ export function useAuth(): UseAuthReturn {
             console.warn("accessToken 쿠키 설정 실패");
         }
         alert("로그인 성공");
-        router.replace("/");
+        router.replace("/dashboard");
 
     } catch (error) {
       console.error("Login failed:", error);

@@ -96,6 +96,8 @@ export const isProtectedRoute = (
       '/login': '로그인',
       '/profile': '내 프로필',
       '/register': '회원가입',
+      '/dashboard': '대시보드',
+      '/transactions/new': '지출 내역 추가',
     };
     return map[path] || '페이지';
   };
