@@ -49,17 +49,9 @@ export default function Header({ showBackButton = false }: HeaderProps) {
           {accessToken && (
             <>
               <button
-                onClick={() => router.push('/flashcard')}
+                onClick={() => router.push('/dashboard')}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="깜빡이학습"
-              >
-                <BookCheck />
-              </button>
-
-              <button
-                onClick={() => router.push('/favorites')}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="즐겨찾기"
+                title="대쉬보드"
               >
                 <Star />
               </button>
