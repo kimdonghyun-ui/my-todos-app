@@ -84,14 +84,16 @@ export default function DashboardPage() {
               {dashboardData?.recentTransactions.map((transaction) => (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-800 gap-2"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-full ${
-                      transaction.attributes.type === 'income' 
-                        ? 'bg-green-100 dark:bg-green-900/30' 
-                        : 'bg-red-100 dark:bg-red-900/30'
-                    }`}>
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={`p-2 rounded-full ${
+                        transaction.attributes.type === 'income'
+                          ? 'bg-green-100 dark:bg-green-900/30'
+                          : 'bg-red-100 dark:bg-red-900/30'
+                      }`}
+                    >
                       {transaction.attributes.type === 'income' ? (
                         <ArrowUpCircle className="h-5 w-5 text-green-500" />
                       ) : (
@@ -100,14 +102,29 @@ export default function DashboardPage() {
                     </div>
                     <div>
                       <p className="font-medium">{transaction.attributes.category}</p>
-                      <p className="text-sm text-gray-500">{transaction.attributes.memo}</p>
+                      <p className="text-sm text-gray-500">{transaction.attributes.memo || '-'}</p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(transaction.attributes.createdAt).toLocaleString('ko-KR', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          weekday: 'short',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true,
+                        })}
+                      </p>
                     </div>
                   </div>
-                  <div className={`font-medium ${
-                    transaction.attributes.type === 'income' 
-                      ? 'text-green-500' 
-                      : 'text-red-500'
-                  }`}>
+
+                  {/* 💰 금액 위치를 아래로 내려서 세로로 배치 */}
+                  <div
+                    className={`font-semibold text-right sm:text-left ${
+                      transaction.attributes.type === 'income'
+                        ? 'text-green-500'
+                        : 'text-red-500'
+                    }`}
+                  >
                     {transaction.attributes.type === 'income' ? '+' : '-'}
                     {formatCurrency(transaction.attributes.amount)}
                   </div>

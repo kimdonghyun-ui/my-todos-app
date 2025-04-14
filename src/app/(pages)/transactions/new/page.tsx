@@ -62,15 +62,6 @@ export default function NewTransactionPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center gap-4 mb-8">
-        <button
-          onClick={() => router.back()}
-          className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </button>
-        <h1 className="text-2xl font-bold">새 거래 내역</h1>
-      </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 날짜 입력 */}
