@@ -1,4 +1,4 @@
-export interface TransactionAttributes {
+export interface TransactionGetAttributes {
   type: 'income' | 'expense';
   amount: number;
   category: string;
@@ -8,11 +8,20 @@ export interface TransactionAttributes {
   updatedAt: string;
   publishedAt: string;
 }
-
-export interface Transaction {
+export interface GetTransaction {
   id: number;
-  attributes: TransactionAttributes;
+  attributes: TransactionGetAttributes;
 }
+
+export interface TransactionPostAttributes {
+  type: 'income' | 'expense';
+  amount: number;
+  category: string;
+  memo: string;
+  date: string;
+  users_permissions_user: string;
+}
+
 
 export interface StrapiResponse<T> {
   data: T[];
@@ -26,11 +35,15 @@ export interface StrapiResponse<T> {
   };
 }
 
+
+
+
+
 export interface DashboardData {
   todaySummary: {
     totalIncome: number;
     totalExpense: number;
     balance: number;
   };
-  recentTransactions: Transaction[];
+  recentTransactions: GetTransaction[];
 } 

@@ -7,7 +7,7 @@ import DarkModeToggle from '../DarkModeToggle';
 import { usePathname } from 'next/navigation';
 import { getTitleFromPath } from '@/utils/utils';
 
-import { BookCheck, Star } from 'lucide-react';
+import { LayoutDashboard, PlusCircle } from 'lucide-react';
 
 interface HeaderProps {
   showBackButton?: boolean;
@@ -53,10 +53,19 @@ export default function Header({ showBackButton = false }: HeaderProps) {
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                 title="대쉬보드"
               >
-                <Star />
+                <LayoutDashboard className="w-5 h-5" />
               </button>
+
+              <button
+                onClick={() => router.push('/transactions/new')}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                title="통계"
+              >
+                <PlusCircle className="w-5 h-5" />
+              </button>
+
               {/* <button
-                onClick={() => router.push('/stats')}
+                onClick={() => router.push('//transactions/new')}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                 title="통계"
               >

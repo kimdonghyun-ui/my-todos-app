@@ -38,6 +38,7 @@ export const config = {
     '/',              // protected
     '/profile',       // protected
     '/dashboard',         // protected
+    '/transactions/new',         // protected
     '/login',         // auth
   ],
 }; 

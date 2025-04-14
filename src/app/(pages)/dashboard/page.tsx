@@ -5,13 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowDownCircle, ArrowUpCircle, Calendar, Wallet } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { useTransactionStore } from '@/store/transactionStore';
+import { useAuthStore } from '@/store/authStore';
 
 export default function DashboardPage() {
+  const { user } = useAuthStore();
   const { dashboardData, isLoading, error, fetchDashboardData } = useTransactionStore();
 
   useEffect(() => {
-    fetchDashboardData();
-  }, [fetchDashboardData]);
+    fetchDashboardData(user?.id?.toString() || '');
+  }, [fetchDashboardData,user]);
 
   if (isLoading) {
     return (
