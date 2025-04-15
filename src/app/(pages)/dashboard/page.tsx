@@ -6,6 +6,7 @@ import { ArrowDownCircle, ArrowUpCircle, Calendar, Wallet } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { useTransactionStore } from '@/store/transactionStore';
 import { useAuthStore } from '@/store/authStore';
+import CountUp from 'react-countup';
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
@@ -13,7 +14,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchDashboardData(user?.id?.toString() || '');
-  }, [fetchDashboardData,user]);
+  }, [fetchDashboardData, user]);
 
   if (isLoading) {
     return (
@@ -42,7 +43,14 @@ export default function DashboardPage() {
             <ArrowUpCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(dashboardData?.todaySummary.totalIncome || 0)}</div>
+            <div className="text-2xl font-bold">
+              <CountUp
+                end={dashboardData?.todaySummary.totalIncome || 0}
+                duration={1.5}
+                separator=","
+                formattingFn={(value) => `${formatCurrency(value)}원`}
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -52,7 +60,14 @@ export default function DashboardPage() {
             <ArrowDownCircle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(dashboardData?.todaySummary.totalExpense || 0)}</div>
+            <div className="text-2xl font-bold">
+              <CountUp
+                end={dashboardData?.todaySummary.totalExpense || 0}
+                duration={1.5}
+                separator=","
+                formattingFn={(value) => `${formatCurrency(value)}원`}
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -62,7 +77,20 @@ export default function DashboardPage() {
             <Wallet className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(dashboardData?.todaySummary.balance || 0)}</div>
+            <div
+              className={`text-2xl font-bold ${
+                (dashboardData?.todaySummary.balance ?? 0) < 0
+                  ? 'text-red-500'
+                  : 'text-blue-600 dark:text-blue-300'
+              }`}
+            >
+              <CountUp
+                end={dashboardData?.todaySummary.balance || 0}
+                duration={1.5}
+                separator=","
+                formattingFn={(value) => `${formatCurrency(value)}원`}
+              />
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -125,7 +153,8 @@ export default function DashboardPage() {
                     }`}
                   >
                     {transaction.attributes.type === 'income' ? '+' : '-'}
-                    {formatCurrency(transaction.attributes.amount)}
+                    {' '}
+                    {`${formatCurrency(transaction.attributes.amount, false)}원`}
                   </div>
                 </div>
               ))}

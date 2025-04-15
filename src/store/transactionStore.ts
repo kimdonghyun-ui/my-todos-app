@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { fetchApi } from '@/lib/fetchApi';
 import { GetTransaction, StrapiResponse, DashboardData, TransactionPostAttributes } from '@/types/transaction';
 import { getTodayKST } from '@/utils/utils';
+import { toast } from 'react-hot-toast';
 
 interface TransactionState {
   dashboardData: DashboardData | null;
@@ -15,7 +16,6 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   dashboardData: null,
   isLoading: false,
   error: null,
-
 
 
   // fetchDashboardData = 대시보드 데이터 불러오기(거래내역 목록)
@@ -74,8 +74,11 @@ export const useTransactionStore = create<TransactionState>((set) => ({
         method: 'POST',
         body: JSON.stringify({ data: transactionData }),
       });
-    } catch {
-      set({ error: '거래를 저장하는데 실패했습니다.' });
+      toast.success('거래 내역 저장 성공!');
+    } catch (err) {
+      set({ error: '거래 내역 저장 실패!' });
+      toast.error('거래 내역 저장 실패!');
+      throw err; // ✅ 페이지 쪽 catch로 에러 전달
     } finally {
       set({ isLoading: false });
     }

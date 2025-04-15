@@ -32,6 +32,7 @@ export async function fetchApi<T>(
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}${url}`, defaultOptions);
 
+    
     // 인증이 필요한 경우 토큰 만료 처리
     if (auth && retry && response.status === 401) {
         try {

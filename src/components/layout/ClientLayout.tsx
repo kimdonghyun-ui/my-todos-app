@@ -8,7 +8,7 @@ import { isProtectedRoute } from "@/utils/utils";
 import { useAuthStatus } from '@/hooks/useAuthStatus';
 import { performLogout } from "@/lib/auth";
 import { useThemeStore } from "@/store/themeStore";
-
+import { Toaster } from 'react-hot-toast';
 
 import Header from "./Header";
 
@@ -67,11 +67,13 @@ export default function ClientLayout({
   // 로그인 페이지에서는 헤더를 표시하지 않음
   const showHeader = pathname !== '/login';
 
-  return <>
-  {showHeader && <Header showBackButton />}
-  {/* <span className="text-sm">안녕하세요, {user?.username ?? "게스트"}님</span> */}
-  {children}
-  </>;
+  return (
+    <>
+      {showHeader && <Header showBackButton />}
+      {children}
+      <Toaster position="top-center" reverseOrder={false} />
+    </>
+  );
 }
 
 

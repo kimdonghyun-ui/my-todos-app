@@ -3,25 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import { fetchApi } from '@/lib/fetchApi';
-import { ArrowLeft, Calendar, Wallet, Tag, MessageSquare } from 'lucide-react';
+import {  Calendar, Wallet, Tag, MessageSquare } from 'lucide-react';
 import { useTransactionStore } from '@/store/transactionStore';
 import { TransactionPostAttributes } from '@/types/transaction';
 import { useAuthStore } from '@/store/authStore'
 import { getTodayKST } from '@/utils/utils';
 
-// interface TransactionForm {
-//   date: string;
-//   type: 'income' | 'expense';
-//   category: string;
-//   amount: number;
-//   memo: string;
-// }
-
-const categories = [
-  '식비', '교통비', '쇼핑', '문화생활', '의료/건강', '교육', '주거비', '통신비',
-  '보험', '기타'
-];
 
 const expenseCategories = [
     '식비', '교통비', '쇼핑', '문화생활', '의료/건강', '교육', '주거비', '통신비', '보험', '기타'
@@ -32,11 +19,10 @@ const incomeCategories = [
 ];
 
 
-
 export default function NewTransactionPage() {
   const router = useRouter();
   const { user } = useAuthStore();
-  const { fetchCreateTransaction, isLoading, error } = useTransactionStore();
+  const { fetchCreateTransaction, isLoading, } = useTransactionStore();
 
   const [formData, setFormData] = useState<TransactionPostAttributes>({
     type: 'expense',
@@ -49,20 +35,16 @@ export default function NewTransactionPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    
-    
     try {
       await fetchCreateTransaction(formData);
       router.push('/dashboard');
-    } catch{
-      alert(error)
-    }
+    } catch (err) {
+        console.error(err);
+      }
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 날짜 입력 */}
         <div className="space-y-2">

@@ -5,7 +5,7 @@ import { LoginCredentials, RegisterCredentials, ProfileUpdateCredentials } from 
 
 import { useAuthStore } from "@/store/authStore";
 import { loginApi, registerApi, profileUpdateApi } from '@/lib/api';
-
+import { toast } from 'react-hot-toast';
 
 // const API_URL = 'http://localhost:1337/api';
 
@@ -44,7 +44,8 @@ export function useAuth(): UseAuthReturn {
         if (!resCookie.ok) {
             console.warn("accessToken 쿠키 설정 실패");
         }
-        alert("로그인 성공");
+        // alert("로그인 성공");
+        toast.success('로그인 성공!');
         router.replace("/dashboard");
 
     } catch (error) {
@@ -60,7 +61,7 @@ export function useAuth(): UseAuthReturn {
     
     try {
         await registerApi(credentials); // ✅ API 호출
-        alert("회원가입 성공");
+        toast.success('회원가입 성공!');
         await handleLogin({ 
             identifier: credentials.email,
             password: credentials.password 
@@ -78,7 +79,7 @@ export function useAuth(): UseAuthReturn {
     
     try {
         const user = await profileUpdateApi(id,credentials); // ✅ API 호출
-        alert("프로필 업데이트 성공");
+        toast.success('프로필 업데이트 성공!');
         setUser(user);//zustand 에 user 저장
     } catch (error) {
       console.error("Login failed:", error);

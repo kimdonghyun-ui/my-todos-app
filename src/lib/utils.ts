@@ -5,9 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number): string {
+export function formatCurrency(amount: number, showSymbol = true): string {
   return new Intl.NumberFormat('ko-KR', {
-    style: 'currency',
+    style: showSymbol ? 'currency' : 'decimal',
     currency: 'KRW',
     maximumFractionDigits: 0,
   }).format(amount)
