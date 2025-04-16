@@ -6,17 +6,20 @@ import { toast } from 'react-hot-toast';
 
 interface TransactionState {
   dashboardData: DashboardData | null;
+  transactions: GetTransaction[];
   isLoading: boolean;
   error: string | null;
   fetchDashboardData: (userId: string) => Promise<void>;
   fetchCreateTransaction: (transactionData: TransactionPostAttributes) => Promise<void>;
+  fetchTransactions: (filters?: { type?: 'income' | 'expense', date?: string }) => Promise<void>;
+  deleteTransaction: (id: number) => Promise<void>;
 }
 
 export const useTransactionStore = create<TransactionState>((set) => ({
   dashboardData: null,
+  transactions: [],
   isLoading: false,
   error: null,
-
 
   // fetchDashboardData = 대시보드 데이터 불러오기(거래내역 목록)
   fetchDashboardData: async (userId: string) => {
@@ -65,7 +68,6 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     }
   },
 
-
   // fetchCreateTransaction = 거래 내역 저장
   fetchCreateTransaction: async (transactionData: TransactionPostAttributes) => {
     set({ isLoading: true, error: null });
@@ -78,13 +80,84 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     } catch (err) {
       set({ error: '거래 내역 저장 실패!' });
       toast.error('거래 내역 저장 실패!');
-      throw err; // ✅ 페이지 쪽 catch로 에러 전달
+      throw err;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  // fetchTransactions = 거래 내역 조회
+  fetchTransactions: async (filters?: {
+    viewType?: 'all' | 'monthly' | 'daily',
+    type?: 'income' | 'expense',
+    date?: string
+  }) => {
+    set({ isLoading: true, error: null });
+  
+    try {
+      const queryParams = new URLSearchParams();
+  
+      // 📅 날짜 필터 처리
+      if (filters?.viewType === 'monthly') { // 월별 거래 내역 조회
+        if (!filters.date) { //filters.date = 2025-06
+          toast.error('날짜 값이 없습니다.');
+          return;
+        }
+
+        const startDate = `${filters.date}-01`; // 예) 2025-06-01
+
+        const [year, month] = filters.date.split('-'); // 예) year = 2025, month = 06
+        const lastDay = new Date(Number(year), Number(month), 0).getDate(); // 해당 달의 마지막 날 (28~31)
+        const endDate = `${filters.date}-${lastDay.toString().padStart(2, '0')}`; // 예) 2025-06-30
+  
+        queryParams.append('filters[date][$gte]', startDate);
+        queryParams.append('filters[date][$lte]', endDate);
+  
+      } else if (filters?.viewType === 'daily') { // 일별 거래 내역 조회
+        if (!filters.date) { //filters.date = 2025-06-16
+          toast.error('날짜 값이 없습니다.');
+          return;
+        }
+  
+        queryParams.append('filters[date][$eq]', filters.date);
+      }
+  
+      // 💰 수입/지출 타입 필터
+      if (filters?.type) {
+        queryParams.append('filters[type][$eq]', filters.type);
+      }
+    
+      // 📡 API 호출
+      const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions?${queryParams.toString()}`);
+      const data = response.data;
+
+      set({ transactions: data });
+  
+    } catch {
+      set({ error: '거래 내역을 불러오는데 실패했습니다.' });
+      toast.error('거래 내역을 불러오는데 실패했습니다.');
     } finally {
       set({ isLoading: false });
     }
   },
   
 
-
-
+  // deleteTransaction = 거래 내역 삭제
+  deleteTransaction: async (id: number) => {
+    set({ isLoading: true, error: null });
+    try {
+      await fetchApi(`/transactions/${id}`, {
+        method: 'DELETE',
+      });
+      set((state) => ({
+        transactions: state.transactions.filter((t) => t.id !== id),
+      }));
+      toast.success('거래 내역이 삭제되었습니다.');
+    } catch {
+      set({ error: '거래 내역 삭제에 실패했습니다.' });
+      toast.error('거래 내역 삭제에 실패했습니다.');
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 })); 

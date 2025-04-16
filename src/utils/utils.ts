@@ -134,13 +134,25 @@ export const isProtectedRoute = (
 
 
 
-  export function getTodayKST(): string {
-    const now = new Date();
-    // UTC -> KST (+9시간)
-    const offset = 9 * 60 * 60 * 1000;
-    const kstDate = new Date(now.getTime() + offset);
-    return kstDate.toISOString().split('T')[0];
+  export function getTodayKST(format: 'year' | 'month' | 'date' = 'date'): string {
+    const kstDate = new Date(); // 이미 브라우저는 KST
+  
+    const year = kstDate.getFullYear();
+    const month = String(kstDate.getMonth() + 1).padStart(2, '0');
+    const day = String(kstDate.getDate()).padStart(2, '0');
+  
+    switch (format) {
+      case 'year':
+        return `${year}`;
+      case 'month':
+        return `${year}-${month}`;
+      case 'date':
+      default:
+        return `${year}-${month}-${day}`;
+    }
   }
+  
+  
 
 
 

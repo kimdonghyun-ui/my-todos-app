@@ -57,25 +57,22 @@ export default function Header({ showBackButton = false }: HeaderProps) {
               </button>
 
               <button
-                onClick={() => router.push('/transactions/new')}
+                onClick={() => router.push('/transactions')}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="통계"
-              >
-                <PlusCircle className="w-5 h-5" />
-              </button>
-
-              {/* <button
-                onClick={() => router.push('//transactions/new')}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="통계"
+                title="거래 내역"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeWidth={2} d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="15" y="5" width="4" height="12" rx="1"/><rect x="7" y="8" width="4" height="9" rx="1"/>
                 </svg>
-              </button> */}
+              </button>
 
-
-
+              <button
+                onClick={() => router.push('/transactions/new')}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                title="거래 내역 추가"
+              >
+                <PlusCircle className="w-5 h-5" />
+              </button>
 
               <button
                 onClick={() => router.push('/profile')}
