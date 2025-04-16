@@ -38,8 +38,7 @@ export const config = {
     '/',              // protected
     '/profile',       // protected
     '/dashboard',         // protected
-    '/transactions',         // protected
-    '/transactions/new',         // protected
+    '/transactions/(.*)', // ← 이것만 있으면 아래 전부 포함됨
     '/login',         // auth
   ],
 }; 

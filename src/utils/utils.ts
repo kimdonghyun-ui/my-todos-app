@@ -97,8 +97,15 @@ export const isProtectedRoute = (
       '/profile': '내 프로필',
       '/register': '회원가입',
       '/dashboard': '대시보드',
+      '/transactions': '지출 내역',
       '/transactions/new': '지출 내역 추가',
     };
+
+    //  '/transactions/[...slug]': '지출 내역 수정', 이 적용이 되지 않기에 아래처럼 함
+    if (path.startsWith('/transactions/') && path.includes('/edit')) {
+      return '지출 내역 수정';
+    }
+
     return map[path] || '페이지';
   };
 
