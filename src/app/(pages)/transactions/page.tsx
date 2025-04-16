@@ -191,7 +191,7 @@ export default function TransactionsPage() {
                 <p className="text-sm text-gray-400">새 거래를 추가해보세요.</p>
               </div>
             ) : (
-            transactions.reverse().map((transaction) => (
+              [...transactions].reverse().map((transaction) => (
               <div
                 key={transaction.id}
                 className="bg-white rounded-xl shadow-md p-4 flex justify-between items-center"

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { fetchApi } from '@/lib/fetchApi';
-import { GetTransaction, StrapiResponse, DashboardData, TransactionPostAttributes } from '@/types/transaction';
+import { GetTransaction, StrapiResponse, DashboardData, TransactionPostAttributes, TransactionGetAttributes } from '@/types/transaction';
 import { getTodayKST } from '@/utils/utils';
 import { toast } from 'react-hot-toast';
 
@@ -11,7 +11,10 @@ interface TransactionState {
   error: string | null;
   fetchDashboardData: (userId: string) => Promise<void>;
   fetchCreateTransaction: (transactionData: TransactionPostAttributes) => Promise<void>;
-  fetchTransactions: (filters?: { type?: 'income' | 'expense', date?: string }) => Promise<void>;
+  fetchUpdateTransaction: (id: number, transactionData: TransactionPostAttributes) => Promise<void>;
+
+  fetchTransactions: (filters?: { viewType?: 'all' | 'monthly' | 'daily', type?: 'income' | 'expense', date?: string }) => Promise<void>;
+  fetchDetailTransaction: (id: number) => Promise<TransactionGetAttributes | null>;
   deleteTransaction: (id: number) => Promise<void>;
 }
 
@@ -22,7 +25,7 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   error: null,
 
   // fetchDashboardData = 대시보드 데이터 불러오기(거래내역 목록)
-  fetchDashboardData: async (userId: string) => {
+  fetchDashboardData: async (userId) => {
     set({ isLoading: true, error: null });
     try {
       const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions?filters[users_permissions_user][id][$eq]=${userId}`);
@@ -69,7 +72,7 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   },
 
   // fetchCreateTransaction = 거래 내역 저장
-  fetchCreateTransaction: async (transactionData: TransactionPostAttributes) => {
+  fetchCreateTransaction: async (transactionData) => {
     set({ isLoading: true, error: null });
     try {
       const response = await fetchApi<StrapiResponse<GetTransaction>>('/transactions', {
@@ -86,12 +89,28 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     }
   },
 
+  // fetchUpdateTransaction = 거래 내역 수정
+    fetchUpdateTransaction: async (id, transactionData) => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({ data: transactionData }),
+            });
+            toast.success('거래 내역 수정 성공!');
+        } catch {
+            set({ error: '거래 내역 수정 실패!' });
+            toast.error('거래 내역 수정 실패!');
+        } finally {
+            set({ isLoading: false });
+        }
+    },
+  
+
+
+
   // fetchTransactions = 거래 내역 조회
-  fetchTransactions: async (filters?: {
-    viewType?: 'all' | 'monthly' | 'daily',
-    type?: 'income' | 'expense',
-    date?: string
-  }) => {
+  fetchTransactions: async (filters) => {
     set({ isLoading: true, error: null });
   
     try {
@@ -141,6 +160,21 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     }
   },
   
+  // fetchDetailTransaction = 거래 내역 상세 조회
+  fetchDetailTransaction: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await fetchApi<{ data: GetTransaction }>(`/transactions/${id}`);
+      const data = response.data.attributes;
+      return data;
+    } catch (err) {
+      set({ error: '거래 상세 내역을 불러오는데 실패했습니다.' });
+      toast.error('거래 상세 내역을 불러오는데 실패했습니다.');
+      return null;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 
   // deleteTransaction = 거래 내역 삭제
   deleteTransaction: async (id: number) => {
