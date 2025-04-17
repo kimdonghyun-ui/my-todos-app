@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
   // 이미 인증된 사용자가 로그인 페이지 등에 접근하려는 경우
   if (authRoutes.includes(pathname)) {
     if (isAuthenticated) {
-      const url = new URL('/', request.url);
+      const url = new URL('/dashboard', request.url);
       return NextResponse.redirect(url);
     }
   }
