@@ -22,12 +22,12 @@ const loginMessages = [
 export default function LoginForm() {
   const [identifier, setIdentifier] = useState('hello@naver.com');
   const [password, setPassword] = useState('hello123');
-  const { accessToken } = useAuthStore();
-  const isLoading = !!accessToken;
+  // const { accessToken } = useAuthStore();
+  // const isLoading = !!accessToken;
   const { handleLogin } = useAuth();
   const [message, setMessage] = useState(loginMessages[0])
 
-  
+  const { isLoading } = useAuthStore();
 
 
   const handleSubmit = async (e: React.FormEvent) => {

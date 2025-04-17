@@ -17,11 +17,11 @@ interface UseAuthReturn {
 
 export function useAuth(): UseAuthReturn {
   const router = useRouter();
-  const { setAccessToken, setUser } = useAuthStore();
+  const { setAccessToken, setUser, setIsLoading } = useAuthStore();
 
   // ✅ 로그인 로직 (API 호출 + Zustand 상태 업데이트)
   const handleLogin = useCallback(async (credentials: LoginCredentials) => {
-    
+    setIsLoading(true);
     try {
         const response = await loginApi(credentials); // ✅ API 호출
         const { jwt, user } = response
@@ -50,6 +50,8 @@ export function useAuth(): UseAuthReturn {
 
     } catch (error) {
       console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setAccessToken, setUser, router]);
 
