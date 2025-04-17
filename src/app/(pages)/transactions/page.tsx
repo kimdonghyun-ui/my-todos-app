@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Calendar, Trash2, Pencil, Filter, ChevronDown } from 'lucide-react';
+import { Calendar, Trash2, Pencil, ChevronDown } from 'lucide-react';
 import { useTransactionStore } from '@/store/transactionStore';
 import { useAuthStore } from '@/store/authStore';
 import { formatCurrency } from '@/lib/utils';
@@ -44,7 +44,7 @@ export default function TransactionsPage() {
 
       fetchTransactions(filters);
     }
-  }, [user?.id, selectedDate, selectedType]);
+  }, [user?.id, selectedDate, selectedType, viewType, fetchTransactions]);
 
   const handleDelete = async (id: number) => {
     if (confirm('정말 삭제하시겠습니까?')) {

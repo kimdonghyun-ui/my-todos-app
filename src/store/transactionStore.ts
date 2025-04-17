@@ -100,7 +100,7 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   fetchCreateTransaction: async (transactionData) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetchApi<StrapiResponse<GetTransaction>>('/transactions', {
+      await fetchApi<StrapiResponse<GetTransaction>>('/transactions', {
         method: 'POST',
         body: JSON.stringify({ data: transactionData }),
       });
@@ -118,7 +118,7 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     fetchUpdateTransaction: async (id, transactionData) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions/${id}`, {
+            await fetchApi<StrapiResponse<GetTransaction>>(`/transactions/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify({ data: transactionData }),
             });
@@ -192,7 +192,7 @@ export const useTransactionStore = create<TransactionState>((set) => ({
       const response = await fetchApi<{ data: GetTransaction }>(`/transactions/${id}`);
       const data = response.data.attributes;
       return data;
-    } catch (err) {
+    } catch {
       set({ error: '거래 상세 내역을 불러오는데 실패했습니다.' });
       toast.error('거래 상세 내역을 불러오는데 실패했습니다.');
       return null;
@@ -263,7 +263,7 @@ export const useTransactionStore = create<TransactionState>((set) => ({
           expenseByCategory: sortedExpenseCategories,
         },
       });
-    } catch (err) {
+    } catch {
       set({ error: '통계 데이터를 불러오는데 실패했습니다.' });
       toast.error('통계 데이터를 불러오는데 실패했습니다.');
     } finally {

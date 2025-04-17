@@ -64,7 +64,7 @@ export default function TransactionFormPage() {
         };
         fetchData();
 
-    }, [isEdit, id, user]);
+    }, [isEdit, id, user, fetchDetailTransaction]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

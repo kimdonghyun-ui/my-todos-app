@@ -25,7 +25,7 @@ export default function StatisticsPage() {
     if (user?.id) {
       fetchStatistics(user.id.toString(), selectedMonth);
     }
-  }, [user?.id, selectedMonth]);
+  }, [user?.id, selectedMonth, fetchStatistics]);
 
   // 월 선택 드롭다운 옵션 생성
   const generateMonthOptions = () => {
