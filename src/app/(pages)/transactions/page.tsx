@@ -80,14 +80,16 @@ export default function TransactionsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-6">
+        
         {/* 필터 섹션 */}
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-3 w-full">
+            
             {/* 드롭다운 버튼 */}
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="flex items-center justify-between w-full sm:w-auto gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
               >
                 <span>
                   {viewType === 'all' && '전체'}
@@ -99,7 +101,7 @@ export default function TransactionsPage() {
               
               {/* 드롭다운 메뉴 */}
               {isDropdownOpen && (
-                <div className="absolute z-10 mt-2 w-32 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <div className="absolute z-10 mt-2 w-full sm:w-32 bg-white border border-gray-300 rounded-lg shadow-lg text-sm">
                   <button
                     onClick={() => {
                       setViewType('all');
@@ -135,22 +137,22 @@ export default function TransactionsPage() {
             </div>
 
             {/* 날짜 선택 */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <Calendar className="h-5 w-5" />
               <input
                 type={viewType === 'monthly' ? 'month' : 'date'}
                 value={selectedDate}
                 onChange={handleDateChange}
                 disabled={viewType === 'all'}
-                className="rounded-lg border border-gray-300 px-3 py-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm disabled:bg-gray-100 disabled:cursor-not-allowed w-full sm:w-auto"
               />
             </div>
 
-            {/* 타입 필터 */}
-            <div className="flex items-center gap-2 ml-auto">
+            {/* 타입 필터 버튼 */}
+            <div className="flex gap-2 flex-wrap justify-start sm:ml-auto">
               <button
                 onClick={() => setSelectedType('all')}
-                className={`px-4 py-2 rounded-lg ${
+                className={`px-3 py-1.5 rounded-lg text-sm ${
                   selectedType === 'all'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -160,7 +162,7 @@ export default function TransactionsPage() {
               </button>
               <button
                 onClick={() => setSelectedType('income')}
-                className={`px-4 py-2 rounded-lg ${
+                className={`px-3 py-1.5 rounded-lg text-sm ${
                   selectedType === 'income'
                     ? 'bg-green-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -170,7 +172,7 @@ export default function TransactionsPage() {
               </button>
               <button
                 onClick={() => setSelectedType('expense')}
-                className={`px-4 py-2 rounded-lg ${
+                className={`px-3 py-1.5 rounded-lg text-sm ${
                   selectedType === 'expense'
                     ? 'bg-red-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -181,6 +183,7 @@ export default function TransactionsPage() {
             </div>
           </div>
         </div>
+
 
         {/* 거래 내역 리스트 */}
         <div className="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto">

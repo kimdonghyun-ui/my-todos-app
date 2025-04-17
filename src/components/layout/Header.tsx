@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { getTitleFromPath } from '@/utils/utils';
 
 import { BarChart2, LayoutDashboard, LogOut, PlusCircle, Receipt, User } from 'lucide-react';
+import { IconBtn } from '../ui/IconBtn';
 
 interface HeaderProps {
   showBackButton?: boolean;
@@ -29,72 +30,33 @@ export default function Header({ showBackButton = false }: HeaderProps) {
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-sm z-50">
-      <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="max-w-4xl mx-auto px-2 sm:px-4 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           {showBackButton && (
             <button
               onClick={() => router.back()}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors shrink-0"
             >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
           )}
-          <h1 className="text-xl font-semibold text-gray-800 dark:text-white">{title}</h1>
+          <h1 className="text-base sm:text-xl font-semibold text-gray-800 dark:text-white truncate">
+            {title}
+          </h1>
         </div>
-        
-        <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+
+        <div className="flex items-center gap-1 sm:gap-3 flex-wrap justify-end max-w-[70%] sm:max-w-none">
           <DarkModeToggle />
           {accessToken && (
             <>
-              <button
-                onClick={() => router.push('/dashboard')}
-                className="p-1 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="대쉬보드"
-              >
-                <LayoutDashboard className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-
-              <button
-                onClick={() => router.push('/statistics')}
-                className="p-1 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="통계"
-              >
-                <BarChart2 className="w-4 h-4 sm:w-6 sm:h-6" />
-              </button>
-
-              <button
-                onClick={() => router.push('/transactions')}
-                className="p-1 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="거래 내역"
-              >
-                <Receipt className="w-4 h-4 sm:w-6 sm:h-6" />
-              </button>
-
-              <button
-                onClick={() => router.push('/transactions/new')}
-                className="p-1 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="거래 내역 추가"
-              >
-                <PlusCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-
-              <button
-                onClick={() => router.push('/profile')}
-                className="p-1 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="프로필"
-              >
-                <User className="w-4 h-4 sm:w-6 sm:h-6" />
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="p-1 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                title="로그아웃"
-              >
-                <LogOut className="w-4 h-4 sm:w-6 sm:h-6" />
-              </button>
+              <IconBtn onClick={() => router.push('/dashboard')} icon={<LayoutDashboard />} title="대시보드" />
+              <IconBtn onClick={() => router.push('/statistics')} icon={<BarChart2 />} title="통계" />
+              <IconBtn onClick={() => router.push('/transactions')} icon={<Receipt />} title="거래 내역" />
+              <IconBtn onClick={() => router.push('/transactions/new')} icon={<PlusCircle />} title="거래 추가" />
+              <IconBtn onClick={() => router.push('/profile')} icon={<User />} title="프로필" />
+              <IconBtn onClick={handleLogout} icon={<LogOut />} title="로그아웃" />
             </>
           )}
         </div>
