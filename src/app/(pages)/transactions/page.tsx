@@ -205,8 +205,8 @@ export default function TransactionsPage() {
                       className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600"
                     >
                       <div className="flex items-center p-4 gap-4">
-                        {/* 왼쪽: 아이콘 */}
-                        <div className="flex-shrink-0">
+                        {/* 왼쪽: 아이콘 (모바일에서는 숨김) */}
+                        <div className="hidden sm:block flex-shrink-0">
                           <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                             transaction.attributes.type === 'income'
                               ? 'bg-green-50 dark:bg-green-900/20'
@@ -223,6 +223,14 @@ export default function TransactionsPage() {
                         {/* 중앙: 정보 */}
                         <div className="flex flex-col gap-1 min-w-0 flex-1">
                           <div className="flex items-center gap-2">
+                            {/* 모바일에서만 보이는 작은 아이콘 */}
+                            <div className="block sm:hidden">
+                              <Icon className={`w-5 h-5 ${
+                                transaction.attributes.type === 'income'
+                                  ? 'text-green-600 dark:text-green-400'
+                                  : 'text-red-600 dark:text-red-400'
+                              }`} />
+                            </div>
                             <span className={`text-lg font-semibold tracking-tight ${
                               transaction.attributes.type === 'income'
                                 ? 'text-green-600 dark:text-green-400'
