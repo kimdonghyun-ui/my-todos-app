@@ -139,9 +139,10 @@ export default function DashboardPage() {
                   key={transaction.id}
                   className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-800 gap-2"
                 >
-                  <div className="flex items-start gap-3">
+                  {/* 아이콘 + 내용 */}
+                  <div className="flex items-start gap-3 w-full sm:w-auto flex-1 min-w-0">
                     <div
-                      className={`p-2 rounded-full ${
+                      className={`p-2 rounded-full shrink-0 ${
                         transaction.attributes.type === 'income'
                           ? 'bg-green-100 dark:bg-green-900/30'
                           : 'bg-red-100 dark:bg-red-900/30'
@@ -153,10 +154,16 @@ export default function DashboardPage() {
                         <ArrowDownCircle className="h-5 w-5 text-red-500" />
                       )}
                     </div>
-                    <div>
-                      <p className="font-medium">{transaction.attributes.category}</p>
-                      <p className="text-sm text-gray-500">{transaction.attributes.memo || '-'}</p>
-                      <p className="text-xs text-gray-400">
+
+                    {/* 텍스트 내용 */}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium truncate">
+                        {transaction.attributes.category}
+                      </p>
+                      <p className="text-sm text-gray-600 break-words whitespace-pre-line overflow-hidden">
+                        {transaction.attributes.memo || '-'}
+                      </p>
+                      <p className="text-xs text-gray-400 truncate">
                         {new Date(transaction.attributes.createdAt).toLocaleString('ko-KR', {
                           year: 'numeric',
                           month: 'long',
@@ -170,16 +177,15 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
-                  {/* 💰 금액 위치를 아래로 내려서 세로로 배치 */}
+                  {/* 금액 */}
                   <div
-                    className={`font-semibold text-right sm:text-left ${
+                    className={`font-semibold text-right sm:text-left break-keep whitespace-nowrap ${
                       transaction.attributes.type === 'income'
                         ? 'text-green-500'
                         : 'text-red-500'
                     }`}
                   >
-                    {transaction.attributes.type === 'income' ? '+' : '-'}
-                    {' '}
+                    {transaction.attributes.type === 'income' ? '+' : '-'}{' '}
                     {`${formatCurrency(transaction.attributes.amount, false)}원`}
                   </div>
                 </div>

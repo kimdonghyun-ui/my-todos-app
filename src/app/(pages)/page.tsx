@@ -2,11 +2,12 @@
 
 import { useEffect } from 'react'
 import Header from '@/components/layout/Header'
+import { redirect } from 'next/navigation';
 
 export default function Home() {
   useEffect(() => {
-    
-  }, [])
+    redirect('/dashboard');
+  }, [redirect])
 
 
 

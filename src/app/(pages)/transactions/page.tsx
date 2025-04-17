@@ -197,15 +197,14 @@ export default function TransactionsPage() {
               [...transactions].reverse().map((transaction) => (
               <div
                 key={transaction.id}
-                className="bg-white rounded-xl shadow-md p-4 flex justify-between items-center"
+                className="bg-white rounded-xl shadow-md p-4 flex justify-between items-center gap-4"
               >
-                <div className="flex flex-col gap-1">
+                {/* 왼쪽 정보 */}
+                <div className="flex flex-col gap-1 min-w-0"> {/* ← min-w-0 추가! */}
                   <div className="flex items-center gap-2">
                     <span
                       className={`font-medium ${
-                        transaction.attributes.type === 'income'
-                          ? 'text-green-500'
-                          : 'text-red-500'
+                        transaction.attributes.type === 'income' ? 'text-green-500' : 'text-red-500'
                       }`}
                     >
                       {formatCurrency(transaction.attributes.amount)}
@@ -218,13 +217,14 @@ export default function TransactionsPage() {
                     {transaction.attributes.date}
                   </div>
                   {transaction.attributes.memo && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 break-words w-full">
                       {transaction.attributes.memo}
                     </div>
                   )}
                 </div>
 
-                <div className="flex gap-2">
+                {/* 오른쪽 버튼들 */}
+                <div className="flex-shrink-0 flex gap-2">
                   <button
                     onClick={() => router.push(`/transactions/${transaction.id}/edit`)}
                     className="p-2 text-gray-500 hover:text-blue-500 transition-colors"
