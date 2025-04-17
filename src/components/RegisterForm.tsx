@@ -68,7 +68,7 @@ export default function RegisterForm() {
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">새로운 계정 만들기</h2>
-            <p className="text-gray-600 dark:text-gray-400">할 일을 관리하기 위한 계정을 만들어보세요</p>
+            <p className="text-gray-600 dark:text-gray-400">지출 관리하기 위한 계정을 만들어보세요</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
