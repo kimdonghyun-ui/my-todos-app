@@ -93,6 +93,32 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
+
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">총 자산</CardTitle>
+            <Wallet className="h-4 w-4 text-purple-500" />
+          </CardHeader>
+          <CardContent>
+            <div
+              className={`text-2xl font-bold ${
+                (dashboardData?.totalAssets ?? 0) < 0
+                  ? 'text-red-500'
+                  : 'text-purple-600 dark:text-purple-300'
+              }`}
+            >
+              <CountUp
+                end={dashboardData?.totalAssets || 0}
+                duration={1.5}
+                separator=","
+                formattingFn={(value) => `${formatCurrency(value)}원`}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+
+
       </div>
 
       {/* 최근 거래 내역 */}

@@ -46,4 +46,5 @@ export interface DashboardData {
     balance: number;
   };
   recentTransactions: GetTransaction[];
-} 
+  totalAssets: number;
+}

@@ -28,29 +28,47 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   fetchDashboardData: async (userId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions?filters[users_permissions_user][id][$eq]=${userId}`);
-      
-      // 오늘 날짜 기준으로 필터링
-      const today = getTodayKST();
-      const todayTransactions = response.data.filter(
-        transaction => transaction.attributes.date === today
-      );
+        const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions?filters[users_permissions_user][id][$eq]=${userId}`);
+        
+        // 오늘 날짜 기준으로 필터링
+        const today = getTodayKST();
+        const todayTransactions = response.data.filter(
+            transaction => transaction.attributes.date === today
+        );
 
-      // 오늘의 수입,지출,잔액 계산
-      const todaySummary = todayTransactions.reduce(
-        (acc, transaction) => {
-          if (transaction.attributes.type === 'income') {
-            acc.totalIncome += transaction.attributes.amount;
-          } else {
-            acc.totalExpense += transaction.attributes.amount;
-          }
-          return acc;
-        },
-        { totalIncome: 0, totalExpense: 0, balance: 0 }
-      );
+        // 오늘의 수입,지출,잔액 계산
+        const todaySummary = todayTransactions.reduce(
+            (acc, transaction) => {
+            if (transaction.attributes.type === 'income') {
+                acc.totalIncome += transaction.attributes.amount;
+            } else {
+                acc.totalExpense += transaction.attributes.amount;
+            }
+            return acc;
+            },
+            { totalIncome: 0, totalExpense: 0, balance: 0 }
+        );
 
-      todaySummary.balance = todaySummary.totalIncome - todaySummary.totalExpense;
+        todaySummary.balance = todaySummary.totalIncome - todaySummary.totalExpense;
 
+
+        console.log('response', response.data);
+        // 전체 자산 계산
+        const totalSummary = response.data.reduce(
+            (acc, transaction) => {
+            if (transaction.attributes.type === 'income') {
+                acc.totalIncome += transaction.attributes.amount;
+            } else {
+                acc.totalExpense += transaction.attributes.amount;
+            }
+            return acc;
+            },
+            { totalIncome: 0, totalExpense: 0, balance: 0 }
+        );
+
+        totalSummary.balance = totalSummary.totalIncome - totalSummary.totalExpense;
+        
+  
       // recentTransactions = 최근 거래 내역 5건(createdAt기준 으로 정렬(sort) 후 slice(0, 5)앞에서 5개 추출)
       const recentTransactions = todayTransactions
         .sort((a, b) => new Date(b.attributes.createdAt).getTime() - new Date(a.attributes.createdAt).getTime())
@@ -59,7 +77,8 @@ export const useTransactionStore = create<TransactionState>((set) => ({
       set({ 
         dashboardData: {
           todaySummary,
-          recentTransactions
+          recentTransactions,
+          totalAssets: totalSummary.balance
         }
       });
     } catch {
