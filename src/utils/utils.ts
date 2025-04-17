@@ -97,6 +97,7 @@ export const isProtectedRoute = (
       '/profile': '내 프로필',
       '/register': '회원가입',
       '/dashboard': '대시보드',
+      '/statistics': '통계',
       '/transactions': '지출 내역',
       '/transactions/new': '지출 내역 추가',
     };

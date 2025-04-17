@@ -7,20 +7,26 @@ import { toast } from 'react-hot-toast';
 interface TransactionState {
   dashboardData: DashboardData | null;
   transactions: GetTransaction[];
+  statistics: {
+    monthlyData: GetTransaction[];
+    incomeByCategory: { category: string; amount: number }[];
+    expenseByCategory: { category: string; amount: number }[];
+  } | null;
   isLoading: boolean;
   error: string | null;
   fetchDashboardData: (userId: string) => Promise<void>;
   fetchCreateTransaction: (transactionData: TransactionPostAttributes) => Promise<void>;
   fetchUpdateTransaction: (id: number, transactionData: TransactionPostAttributes) => Promise<void>;
-
   fetchTransactions: (filters?: { viewType?: 'all' | 'monthly' | 'daily', type?: 'income' | 'expense', date?: string }) => Promise<void>;
   fetchDetailTransaction: (id: number) => Promise<TransactionGetAttributes | null>;
+  fetchStatistics: (userId: string, yearMonth: string) => Promise<void>;
   deleteTransaction: (id: number) => Promise<void>;
 }
 
 export const useTransactionStore = create<TransactionState>((set) => ({
   dashboardData: null,
   transactions: [],
+  statistics: null,
   isLoading: false,
   error: null,
 
@@ -209,6 +215,57 @@ export const useTransactionStore = create<TransactionState>((set) => ({
     } catch {
       set({ error: '거래 내역 삭제에 실패했습니다.' });
       toast.error('거래 내역 삭제에 실패했습니다.');
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  // fetchStatistics = 통계 데이터 조회
+  fetchStatistics: async (userId: string, yearMonth: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      // 해당 월의 시작일과 마지막일 계산
+      const [year, month] = yearMonth.split('-');
+      const startDate = `${yearMonth}-01`;
+      const lastDay = new Date(Number(year), Number(month), 0).getDate();
+      const endDate = `${yearMonth}-${lastDay.toString().padStart(2, '0')}`;
+
+      // API 호출
+      const response = await fetchApi<StrapiResponse<GetTransaction>>(
+        `/transactions?filters[users_permissions_user][id][$eq]=${userId}&filters[date][$gte]=${startDate}&filters[date][$lte]=${endDate}`
+      );
+
+      // 카테고리별 금액 계산
+      const incomeByCategory = new Map<string, number>();
+      const expenseByCategory = new Map<string, number>();
+
+      response.data.forEach((transaction) => {
+        const { type, category, amount } = transaction.attributes;
+        const categoryMap = type === 'income' ? incomeByCategory : expenseByCategory;
+        categoryMap.set(category, (categoryMap.get(category) || 0) + amount);
+      });
+
+      // Top 5 카테고리 정렬
+      const sortedIncomeCategories = Array.from(incomeByCategory.entries())
+        .map(([category, amount]) => ({ category, amount }))
+        .sort((a, b) => b.amount - a.amount)
+        .slice(0, 5);
+
+      const sortedExpenseCategories = Array.from(expenseByCategory.entries())
+        .map(([category, amount]) => ({ category, amount }))
+        .sort((a, b) => b.amount - a.amount)
+        .slice(0, 5);
+
+      set({
+        statistics: {
+          monthlyData: response.data,
+          incomeByCategory: sortedIncomeCategories,
+          expenseByCategory: sortedExpenseCategories,
+        },
+      });
+    } catch (err) {
+      set({ error: '통계 데이터를 불러오는데 실패했습니다.' });
+      toast.error('통계 데이터를 불러오는데 실패했습니다.');
     } finally {
       set({ isLoading: false });
     }
