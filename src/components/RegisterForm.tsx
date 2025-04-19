@@ -1,48 +1,35 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-// import { useAuthStore } from '@/store/authStore';
+import { useAuthStore } from '@/store/authStore';
 import { useAuth } from '@/hooks/useAuth';
 import { handleFileUpload } from "@/utils/fileUpload";
-import Header from '@/components/layout/Header';
 
 export default function RegisterForm() {
-  const [profileImage, setProfileImage] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<string>(""); //프로필 이미지
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
+    username: '', //사용자명
+    email: '', //이메일
+    password: '', //비밀번호
+    passwordConfirm: '', //비밀번호 확인
   });
+  const { isLoading } = useAuthStore();
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const { handleRegister } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
     if (formData.password !== formData.passwordConfirm) {
       setError('비밀번호가 일치하지 않습니다.');
       return;
     }
-
-    try {
-      setIsLoading(true);
-      await handleRegister({
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-        profileImage,
-      });
-      router.push('/login');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '회원가입에 실패했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
+    await handleRegister({
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+      profileImage,
+    });
   };
 
 	// ✅ 파일 선택 핸들러
@@ -63,7 +50,6 @@ export default function RegisterForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
-      <Header showBackButton />
       <div className="max-w-2xl mx-auto px-4 pt-24 pb-8">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
           <div className="mb-8 text-center">

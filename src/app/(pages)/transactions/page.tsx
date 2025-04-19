@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Calendar, Trash2, Pencil, ChevronDown } from 'lucide-react';
 import { useTransactionStore } from '@/store/transactionStore';
 import { useAuthStore } from '@/store/authStore';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency } from '@/utils/utils';
 import { getTodayKST } from '@/utils/utils';
 import { getIconByCategory } from '@/utils/categoryIcons';
 

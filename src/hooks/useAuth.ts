@@ -60,7 +60,7 @@ export function useAuth(): UseAuthReturn {
 
   // ✅ 회원가입(성공하면 로그인 자동시도)
   const handleRegister = useCallback(async (credentials: RegisterCredentials) => {
-    
+    setIsLoading(true);
     try {
         await registerApi(credentials); // ✅ API 호출
         toast.success('회원가입 성공!');
@@ -69,27 +69,29 @@ export function useAuth(): UseAuthReturn {
             password: credentials.password 
         });
     } catch (error) {
+      toast.error('회원가입 실패!');
       console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [handleLogin]);
+  }, [setIsLoading, handleLogin]);
 
 
 
 
   // ✅ 프로필 정보 업데이트
   const handleProfileUpdate = useCallback(async (id: string, credentials: ProfileUpdateCredentials) => {
-    
+    setIsLoading(true);
     try {
         const user = await profileUpdateApi(id,credentials); // ✅ API 호출
         toast.success('프로필 업데이트 성공!');
         setUser(user);//zustand 에 user 저장
     } catch (error) {
       console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [setUser]);
-
-
-
+  }, [setUser, setIsLoading]);
 
   return {
     handleLogin,

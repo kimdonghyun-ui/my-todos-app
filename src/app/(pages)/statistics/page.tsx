@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, ChevronDown, TrendingUp, TrendingDown } from 'lucide-react';
 import { useTransactionStore } from '@/store/transactionStore';
 import { useAuthStore } from '@/store/authStore';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency } from '@/utils/utils';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { getTodayKST } from '@/utils/utils';
 
