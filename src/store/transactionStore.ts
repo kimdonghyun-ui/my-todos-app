@@ -17,7 +17,7 @@ interface TransactionState {
   fetchDashboardData: (userId: string) => Promise<void>;
   fetchCreateTransaction: (transactionData: TransactionPostAttributes) => Promise<void>;
   fetchUpdateTransaction: (id: number, transactionData: TransactionPostAttributes) => Promise<void>;
-  fetchTransactions: (filters?: { viewType?: 'all' | 'monthly' | 'daily', type?: 'income' | 'expense', date?: string }) => Promise<void>;
+  fetchTransactions: (userId: string, filters?: { viewType?: 'all' | 'monthly' | 'daily', type?: 'income' | 'expense', date?: string }) => Promise<void>;
   fetchDetailTransaction: (id: number) => Promise<TransactionGetAttributes | null>;
   fetchStatistics: (userId: string, yearMonth: string) => Promise<void>;
   deleteTransaction: (id: number) => Promise<void>;
@@ -34,51 +34,52 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   fetchDashboardData: async (userId) => {
     set({ isLoading: true, error: null });
     try {
-        const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions?filters[users_permissions_user][id][$eq]=${userId}`);
+      // 📡 API 호출 /transactions (filters[users_permissions_user][id][$eq]=${userId} = 로그인한 유저의 데이터만 불러오기(그냥되는건 아니고 strapi 관계형 설정 했기때문에 가능))
+      const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions?filters[users_permissions_user][id][$eq]=${userId}`);
+      const data = response.data; // data = 응답 데이터(필터링 안한 데이터)
+
+      // today = 오늘 날짜 기준으로 필터링
+      const today = getTodayKST(); // 오늘 날짜 가져오기 예) 2025-04-19
+
+      // todayTransactions = 오늘 날짜 기준으로 필터링
+      const todayTransactions = data.filter(
+          transaction => transaction.attributes.date === today
+      );
+
+      // 오늘의 수입,지출,잔액 계산(todayTransactions = 필터링 한 데이터 사용)
+      const todaySummary = todayTransactions.reduce(
+        (acc, transaction) => {
+        if (transaction.attributes.type === 'income') {
+            acc.totalIncome += transaction.attributes.amount;
+        } else {
+            acc.totalExpense += transaction.attributes.amount;
+        }
+        return acc;
+        },
+        { totalIncome: 0, totalExpense: 0, balance: 0 }
+      );
+
+      todaySummary.balance = todaySummary.totalIncome - todaySummary.totalExpense;
+
+      // 전체 자산 계산(data = 필터링 안한 데이터 사용)
+      const totalSummary = data.reduce(
+        (acc, transaction) => {
+        if (transaction.attributes.type === 'income') {
+            acc.totalIncome += transaction.attributes.amount;
+        } else {
+            acc.totalExpense += transaction.attributes.amount;
+        }
+        return acc;
+        },
+        { totalIncome: 0, totalExpense: 0, balance: 0 }
+      );
+
+      totalSummary.balance = totalSummary.totalIncome - totalSummary.totalExpense;
         
-        // 오늘 날짜 기준으로 필터링
-        const today = getTodayKST();
-        const todayTransactions = response.data.filter(
-            transaction => transaction.attributes.date === today
-        );
-
-        // 오늘의 수입,지출,잔액 계산
-        const todaySummary = todayTransactions.reduce(
-            (acc, transaction) => {
-            if (transaction.attributes.type === 'income') {
-                acc.totalIncome += transaction.attributes.amount;
-            } else {
-                acc.totalExpense += transaction.attributes.amount;
-            }
-            return acc;
-            },
-            { totalIncome: 0, totalExpense: 0, balance: 0 }
-        );
-
-        todaySummary.balance = todaySummary.totalIncome - todaySummary.totalExpense;
-
-
-        console.log('response', response.data);
-        // 전체 자산 계산
-        const totalSummary = response.data.reduce(
-            (acc, transaction) => {
-            if (transaction.attributes.type === 'income') {
-                acc.totalIncome += transaction.attributes.amount;
-            } else {
-                acc.totalExpense += transaction.attributes.amount;
-            }
-            return acc;
-            },
-            { totalIncome: 0, totalExpense: 0, balance: 0 }
-        );
-
-        totalSummary.balance = totalSummary.totalIncome - totalSummary.totalExpense;
-        
-  
-      // recentTransactions = 최근 거래 내역 5건(createdAt기준 으로 정렬(sort) 후 slice(0, 5)앞에서 5개 추출)
-      const recentTransactions = todayTransactions
-        .sort((a, b) => new Date(b.attributes.createdAt).getTime() - new Date(a.attributes.createdAt).getTime())
-        .slice(0, 5);
+      // recentTransactions = 최근 거래 내역 5건(data = 필터링 안한 데이터 사용) (createdAt기준 으로 정렬(sort) 후 slice(0, 5)앞에서 5개 추출) 
+      const recentTransactions = data
+      .sort((a, b) => new Date(b.attributes.createdAt).getTime() - new Date(a.attributes.createdAt).getTime())
+      .slice(0, 5);
 
       set({ 
         dashboardData: {
@@ -100,6 +101,7 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   fetchCreateTransaction: async (transactionData) => {
     set({ isLoading: true, error: null });
     try {
+      // 📡 API 호출 /transactions (데이터 저장)
       await fetchApi<StrapiResponse<GetTransaction>>('/transactions', {
         method: 'POST',
         body: JSON.stringify({ data: transactionData }),
@@ -115,51 +117,67 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   },
 
   // fetchUpdateTransaction = 거래 내역 수정
-    fetchUpdateTransaction: async (id, transactionData) => {
-        set({ isLoading: true, error: null });
-        try {
-            await fetchApi<StrapiResponse<GetTransaction>>(`/transactions/${id}`, {
-                method: 'PUT',
-                body: JSON.stringify({ data: transactionData }),
-            });
-            toast.success('거래 내역 수정 성공!');
-        } catch {
-            set({ error: '거래 내역 수정 실패!' });
-            toast.error('거래 내역 수정 실패!');
-        } finally {
-            set({ isLoading: false });
-        }
-    },
+  fetchUpdateTransaction: async (id, transactionData) => {
+    set({ isLoading: true, error: null });
+    try {
+      // 📡 API 호출 /transactions/${id} (데이터 수정)
+      await fetchApi<StrapiResponse<GetTransaction>>(`/transactions/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ data: transactionData }),
+      });
+      toast.success('거래 내역 수정 성공!');
+    } catch {
+      set({ error: '거래 내역 수정 실패!' });
+      toast.error('거래 내역 수정 실패!');
+    } finally {
+      set({ isLoading: false });
+    }
+  },
   
-
-
-
   // fetchTransactions = 거래 내역 조회
-  fetchTransactions: async (filters) => {
+  fetchTransactions: async (userId, filters) => {
     set({ isLoading: true, error: null });
   
     try {
       const queryParams = new URLSearchParams();
   
-      // 📅 날짜 필터 처리
-      if (filters?.viewType === 'monthly') { // 월별 거래 내역 조회
-        if (!filters.date) { //filters.date = 2025-06
-          toast.error('날짜 값이 없습니다.');
+      // 📅 날짜 필터 처리 (월 기준)
+      if (filters?.viewType === 'monthly') {
+        // ##### 월별 거래 내역 조회 #####
+        if (!filters.date) { //filters.date 값이 없는 경우 토스트 메시지 출력
+           //filters.date = 2025-06
+          toast.error('월별 날짜 값이 없습니다.');
           return;
         }
 
-        const startDate = `${filters.date}-01`; // 예) 2025-06-01
+        // #####
+        // ##### strapi에서 월별 데이터 호출할때 고려할점 #####
+        // [월별기준]
+        // 예)filters[date][$eq]: 2025-05 형태로 하면 안됨...!!! 아래예시처럼 범위 형태로 해야함
+        // 예)filters[date][$gte]: 2025-05-01 & filters[date][$lte]: 2025-05-31 형태로 해야함
 
+        // [일별기준]
+        // 예)filters[date][$eq]: 2025-04-19 형태로 하면 잘됨
+
+        // strapi 에서는 2025-05-05 같은 일별 기준으로는 조회가 되는데 2025-05 같은 월별 기준으로는 조회가 안되서 월별 기준으로 조회하기 위해 아래 코드 추가
+        // 예) 2025-05 월별 기준으로 조회하면 2025-05-01 ~ 2025-05-31 까지 조회됨
+        // ##### strapi에서 월별 데이터 호출할때 고려할점 #####
+        // #####
+
+        // ### filters.date 기준달의 마지막 날 계산 ###
         const [year, month] = filters.date.split('-'); // 예) year = 2025, month = 06
-        const lastDay = new Date(Number(year), Number(month), 0).getDate(); // 해당 달의 마지막 날 (28~31)
+        const lastDay = new Date(Number(year), Number(month), 0).getDate(); // 해당 달의 마지막 날 (28~31중 하나)
+
+        const startDate = `${filters.date}-01`; // 예) 2025-06-01
         const endDate = `${filters.date}-${lastDay.toString().padStart(2, '0')}`; // 예) 2025-06-30
   
         queryParams.append('filters[date][$gte]', startDate);
         queryParams.append('filters[date][$lte]', endDate);
   
-      } else if (filters?.viewType === 'daily') { // 일별 거래 내역 조회
-        if (!filters.date) { //filters.date = 2025-06-16
-          toast.error('날짜 값이 없습니다.');
+      } else if (filters?.viewType === 'daily') { // 📅 날짜 필터 처리 (일별 기준)
+        if (!filters.date) { //filters.date 값이 없는 경우 토스트 메시지 출력
+          //filters.date = 2025-06-16
+          toast.error('일별 날짜 값이 없습니다.');
           return;
         }
   
@@ -171,8 +189,8 @@ export const useTransactionStore = create<TransactionState>((set) => ({
         queryParams.append('filters[type][$eq]', filters.type);
       }
     
-      // 📡 API 호출
-      const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions?${queryParams.toString()}`);
+      // 📡 API 호출 (queryParams 조건에 맞는 데이터 조회)
+      const response = await fetchApi<StrapiResponse<GetTransaction>>(`/transactions?filters[users_permissions_user][id][$eq]=${userId}&${queryParams.toString()}`);
       const data = response.data;
 
       set({ transactions: data });
@@ -189,6 +207,7 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   fetchDetailTransaction: async (id) => {
     set({ isLoading: true, error: null });
     try {
+      // 📡 API 호출 /transactions/${id} (id 기준 데이터 조회)
       const response = await fetchApi<{ data: GetTransaction }>(`/transactions/${id}`);
       const data = response.data.attributes;
       return data;
@@ -205,9 +224,12 @@ export const useTransactionStore = create<TransactionState>((set) => ({
   deleteTransaction: async (id: number) => {
     set({ isLoading: true, error: null });
     try {
+      // 📡 API 호출 /transactions/${id} (id 기준 데이터 삭제)
       await fetchApi(`/transactions/${id}`, {
         method: 'DELETE',
       });
+
+      // 스토어 스테이트 데이터 transactions 안에서도 필터링 해서 해당 id 데이터 삭제
       set((state) => ({
         transactions: state.transactions.filter((t) => t.id !== id),
       }));

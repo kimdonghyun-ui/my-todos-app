@@ -23,28 +23,28 @@ export default function TransactionsPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    if (user?.id) {
-      const filters: { 
-        viewType?: 'all' | 'monthly' | 'daily',
-        date?: string ,
-        type?: 'income' | 'expense',
-      } = {};
+    if (!user?.id) return;
+    
+    const filters: { 
+      viewType?: 'all' | 'monthly' | 'daily',
+      date?: string ,
+      type?: 'income' | 'expense',
+    } = {};
 
-      filters.viewType = viewType; // filters.viewType 에 viewType 값 할당
+    filters.viewType = viewType; // filters.viewType 에 viewType 값 할당
 
-      // 날짜 값이 세팅 되어 있으면 조건 성립
-      if (selectedDate) {
-        filters.date = selectedDate; // filters.date 에 selectedDate 값 할당
-      }
-
-      // 수입, 지출 값이 세팅 되어 있으면 조건 성립
-      if (selectedType !== 'all') {// all 인경우는 전부 노출되어야되기때문에 그냥 필터에 넣지 않음
-        filters.type = selectedType; // filters.type 에 selectedType 값 할당
-      }
-
-
-      fetchTransactions(filters);
+    // 날짜 값이 세팅 되어 있으면 조건 성립
+    if (selectedDate) {
+      filters.date = selectedDate; // filters.date 에 selectedDate 값 할당
     }
+
+    // 수입, 지출 값이 세팅 되어 있으면 조건 성립
+    if (selectedType !== 'all') {// all 인경우는 전부 노출되어야되기때문에 그냥 필터에 넣지 않음
+      filters.type = selectedType; // filters.type 에 selectedType 값 할당
+    }
+
+    fetchTransactions(user?.id?.toString() || '', filters);
+    
   }, [user?.id, selectedDate, selectedType, viewType, fetchTransactions]);
 
   const handleDelete = async (id: number) => {

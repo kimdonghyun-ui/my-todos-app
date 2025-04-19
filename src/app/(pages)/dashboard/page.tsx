@@ -13,6 +13,7 @@ export default function DashboardPage() {
   const { dashboardData, isLoading, error, fetchDashboardData } = useTransactionStore();
 
   useEffect(() => {
+    if (!user?.id) return;
     fetchDashboardData(user?.id?.toString() || '');
   }, [fetchDashboardData, user]);
 

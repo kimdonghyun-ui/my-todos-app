@@ -76,15 +76,18 @@ export const isProtectedRoute = (
     const { match = "startsWith" } = options;
   
     return protectedRoutes.some((route) => {
+
+      // 해당 조건을 안넣으면 모든 경로 전부 / 가 포함되어 있기때문에 전부 보호해버림 예) /transactions 등등 보호해버림
       if (route === "/") {
         return pathname === "/";
       }
   
+      // exact모드인경우 = 완전히 일치하는 경우만 보호
       if (match === "exact") {
         return pathname === route;
       }
   
-      // 기본은 startsWith
+      // 기본은 startsWith모드 라서 하위 경로까지 보호 해줌
       return pathname.startsWith(route);
     });
   };

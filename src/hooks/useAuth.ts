@@ -53,7 +53,7 @@ export function useAuth(): UseAuthReturn {
     } finally {
       setIsLoading(false);
     }
-  }, [setAccessToken, setUser, router]);
+  }, [setIsLoading, setAccessToken, setUser, router]);
 
 
 

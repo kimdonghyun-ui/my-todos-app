@@ -10,6 +10,8 @@ import { getTitleFromPath } from '@/utils/utils';
 import { BarChart2, LayoutDashboard, LogOut, PlusCircle, Receipt, User } from 'lucide-react';
 import { IconBtn } from '../ui/IconBtn';
 
+
+
 interface HeaderProps {
   showBackButton?: boolean;
   // title?: string;
@@ -17,6 +19,9 @@ interface HeaderProps {
 
 export default function Header({ showBackButton = false }: HeaderProps) {
   const path = usePathname();
+  // 로그인 페이지에서는 헤더를 표시하지 않음
+  const showHeader = path !== '/login';
+
   const title = getTitleFromPath(path);
   
 
@@ -29,6 +34,7 @@ export default function Header({ showBackButton = false }: HeaderProps) {
   };
 
   return (
+    showHeader && (
     <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-sm z-50">
       <div className="max-w-4xl mx-auto px-2 sm:px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4 min-w-0">
@@ -62,5 +68,6 @@ export default function Header({ showBackButton = false }: HeaderProps) {
         </div>
       </div>
     </header>
+    )
   );
 } 

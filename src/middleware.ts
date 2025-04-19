@@ -4,6 +4,7 @@ import { protectedRoutes, authRoutes } from "@/lib/constants/auth";
 import { isProtectedRoute } from "@/utils/utils";
 
 export function middleware(request: NextRequest) {
+  console.log('middleware 실행');
   const { pathname } = request.nextUrl; // 현재 페이지의 경로
   
   // 새로고치믕을 했을때 middleware 에서 쿠키에 accessToken 토큰 확인
@@ -35,11 +36,12 @@ export function middleware(request: NextRequest) {
 export const config = {
 
   matcher: [
-    '/',              // protected
-    '/profile',       // protected
-    '/dashboard',         // protected
-    '/statistics',         // protected
-    '/transactions/(.*)', // ← 이것만 있으면 아래 전부 포함됨
-    '/login',         // auth
+    '/',  // 홈(해당 프로젝트에서는 사용안함)
+    '/profile', // 프로필
+    '/dashboard', // 대시보드
+    '/statistics',  // 통계
+    '/transactions',  // 거래내역
+    '/transactions/(.*)', // transactions/new 또는 transactions/123/edit 등의 transactions/ 뒤에 뭐가 더붙는 페이지 전부
+    '/login', // 로그인
   ],
-}; 
+};
