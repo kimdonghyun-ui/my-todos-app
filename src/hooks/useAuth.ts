@@ -46,7 +46,7 @@ export function useAuth(): UseAuthReturn {
         }
         // alert("로그인 성공");
         toast.success('로그인 성공!');
-        router.replace("/dashboard");
+        router.replace("/");
 
     } catch (error) {
       console.error("Login failed:", error);
