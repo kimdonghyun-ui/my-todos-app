@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 const loginMessages = [
   {
-    title: '환영합니다',
+    title: '일정 관리',
     subtitle: '할 일을 관리하기 위해 로그인해주세요',
   },
   // {
