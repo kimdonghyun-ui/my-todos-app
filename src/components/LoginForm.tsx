@@ -6,17 +6,17 @@ import { useAuth } from '@/hooks/useAuth';
 
 const loginMessages = [
   {
-    title: '지출도 추억이 된다면',
-    subtitle: '하루하루의 소비를 기록하며, 나만의 재정 이야기를 시작해보세요',
+    title: '환영합니다',
+    subtitle: '할 일을 관리하기 위해 로그인해주세요',
   },
-  {
-    title: '지출 관리, 더 쉽게',
-    subtitle: '매일의 수입과 지출을 한눈에. 당신만의 스마트 가계부를 시작하세요',
-  },
-  {
-    title: '돈의 흐름을 기록하세요',
-    subtitle: '작은 소비도 소중하게. 당신의 일상을 숫자로 담아보세요',
-  },
+  // {
+  //   title: '지출 관리, 더 쉽게',
+  //   subtitle: '매일의 수입과 지출을 한눈에. 당신만의 스마트 가계부를 시작하세요',
+  // },
+  // {
+  //   title: '돈의 흐름을 기록하세요',
+  //   subtitle: '작은 소비도 소중하게. 당신의 일상을 숫자로 담아보세요',
+  // },
 ]
 
 export default function LoginForm() {
