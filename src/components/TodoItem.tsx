@@ -51,7 +51,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
   exit={{ opacity: 0, y: -20 }}
   transition={{ duration: 0.3 }}
   layout
-  className="group bg-white dark:bg-gray-800 rounded-xl p-4 mb-3 shadow-sm 
+  className="group bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm 
              hover:shadow-md transition-all duration-200"
 >
       <div className="flex items-center gap-3 min-w-0">

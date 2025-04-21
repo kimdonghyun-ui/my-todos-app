@@ -2,7 +2,6 @@
 
 import { useAuthStatus } from '@/hooks/useAuthStatus';
 import { Toaster } from 'react-hot-toast';
-import Header from "./Header";
 
 export default function LayoutGuard({
   children,
@@ -27,7 +26,6 @@ export default function LayoutGuard({
 
   return (// 인증 상태 확인 후 아래 내용 노출
     <>
-        <Header showBackButton />
         {children}
         <Toaster position="top-center" reverseOrder={false} />
     </>

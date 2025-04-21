@@ -1,3 +1,4 @@
+import Header from "@/components/layout/Header";
 
 export default function RootLayout({
   children,
@@ -5,10 +6,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="pt-16 h-screen overflow-hidden">
-        <div className=" h-[calc(100vh-4rem)] overflow-auto">
-          <div className="flex flex-col h-full">{children}</div>
+    <>
+      <Header showBackButton />
+      <div className="flex pt-16 min-h-screen">
+        <div className="flex-1 w-full">
+          {children}
         </div>
-    </div>
+      </div>
+    </>
   );
 }

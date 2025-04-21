@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 const loginMessages = [
   {
     title: '일정 관리',
-    subtitle: '할 일을 관리하기 위해 로그인해주세요',
+    subtitle: '나의 일정을 더 꼼꼼하게 관리! 오늘의 일정을 확인해보세요',
   },
   // {
   //   title: '지출 관리, 더 쉽게',
@@ -41,8 +41,8 @@ export default function LoginForm() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
-      <div className="max-w-2xl mx-auto px-4 pt-24 pb-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
+      <div className="max-w-2xl mx-auto px-4 pt-8 pb-8">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
           <div className="mb-8 text-center">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">{message.title}</h2>

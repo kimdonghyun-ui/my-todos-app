@@ -33,7 +33,7 @@ export default function TodoList() {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 flex flex-col gap-4">
       <AnimatePresence>
         {todos.length === 0 ? (
           <div className="text-center py-10 text-gray-500 dark:text-gray-400">
