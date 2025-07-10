@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
-import { handleFileUpload } from "@/utils/fileUpload";
-import ProfileImage from "@/components/ProfileImage";
+
 import { useAuth } from '@/hooks/useAuth';
+import Image from "next/image";
+import { uploadImage } from '@/utils/uploadImage';
 import { toast } from 'react-hot-toast';
+
 
 export default function ProfileContent() {
   const { user } = useAuthStore();
@@ -24,8 +26,8 @@ export default function ProfileContent() {
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       try {
-        const svgString: string = await handleFileUpload(event);
-        setEditedUser(prev => ({ ...prev, profileImage: svgString }));
+        const imageUrl = await uploadImage(event.target.files[0]);
+        setEditedUser(prev => ({ ...prev, profileImage: imageUrl }));
       } catch (error) {
         console.error("파일 변환 중 오류 발생:", error);
       }
@@ -72,13 +74,7 @@ export default function ProfileContent() {
             <div className="relative">
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-500">
                 {editedUser.profileImage ? (
-                  <ProfileImage
-                    svgString={editedUser.profileImage || ""}
-                    alt={editedUser.username}
-                    width={128}
-                    height={128}
-                    className="object-cover"
-                  />
+                  <Image src={editedUser.profileImage} alt={editedUser.username} width={128} height={128} className="w-[128px] h-[128px] object-cover rounded-full" priority />
                 ) : (
                   <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     <span className="text-4xl text-gray-400">👤</span>
@@ -147,7 +143,7 @@ export default function ProfileContent() {
                       type="password"
                       value={editedUser.password}
                       onChange={(e) => setEditedUser(prev => ({ ...prev, password: e.target.value }))}
-                      placeholder="변경하려면 입력하세요"
+                      placeholder={editedUser.email === 'hello@naver.com' ? '테스트계정은 비밀번호 변경불가' : '변경하려면 입력하세요'}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 
                                focus:ring-2 focus:ring-blue-500 focus:border-transparent
                                dark:bg-gray-700 dark:text-white"
