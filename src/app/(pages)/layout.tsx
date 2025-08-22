@@ -6,9 +6,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col h-screen">
+    <>
       <Header showBackButton />
-      <div className="flex-1 pt-16">{children}</div>
-    </div>
+      <div className="flex pt-16 min-h-screen">
+        <div className="flex-1 w-full">
+          {children}
+        </div>
+      </div>
+    </>
   );
 }

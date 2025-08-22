@@ -1,15 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
+import { useRouter, usePathname } from 'next/navigation';
 import DarkModeToggle from '../DarkModeToggle';
-import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/store/authStore';
 import { getTitleFromPath } from '@/utils/utils';
-
-import { LogOut, User, LayoutDashboard } from 'lucide-react';
+import { ListTodo, LogOut, User } from 'lucide-react';
 import { IconBtn } from '../ui/IconBtn';
-
-
 
 interface HeaderProps {
   showBackButton?: boolean;
@@ -17,21 +13,16 @@ interface HeaderProps {
 }
 
 export default function Header({ showBackButton = false }: HeaderProps) {
-  const path = usePathname();
-  // 로그인 페이지에서는 헤더를 표시하지 않음
-  // const showHeader = path !== '/login'; 레이아웃 파일로 헤더 노출 구분한게 아니라면 여기다 경로 추가해서 헤더 노출 구분
-  const showHeader = true;
-
-  const title = getTitleFromPath(path);
-  
-
   const router = useRouter();
+  const path = usePathname();
+
   const accessToken = useAuthStore((state) => state.accessToken);
   const { performLogout } = useAuthStore();
+  const showHeader = true;
+  const title = getTitleFromPath(path);
   
   const handleLogout = async () => {
     await performLogout();
-    // router.push('/login');
   };
 
   return (
@@ -58,7 +49,7 @@ export default function Header({ showBackButton = false }: HeaderProps) {
           <DarkModeToggle />
           {accessToken && (
             <>
-              <IconBtn onClick={() => router.push('/')} icon={<LayoutDashboard />} title="홈" />
+              <IconBtn onClick={() => router.push('/')} icon={<ListTodo />} title="일정 관리" />
               <IconBtn onClick={() => router.push('/profile')} icon={<User />} title="프로필" />
               <IconBtn onClick={handleLogout} icon={<LogOut />} title="로그아웃" />
             </>

@@ -40,10 +40,5 @@ export const config = {
     '/login', // 로그인
     '/register', // 회원가입
     '/profile', // 프로필
-    // '/dashboard', // 대시보드
-    // '/statistics',  // 통계
-    // '/transactions',  // 거래내역
-    //'/transactions/(.*)', // transactions/new 또는 transactions/123/edit 등의 transactions/ 뒤에 뭐가 더붙는 페이지 전부
-    
   ],
 };

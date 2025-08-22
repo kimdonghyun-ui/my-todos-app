@@ -17,6 +17,10 @@ export const getTitleFromPath = (path: string) => {
     '/login': '로그인',
     '/profile': 'ME',
     '/register': '회원가입',
+    '/dashboard': '대시보드',
+    '/statistics': '통계',
+    '/transactions': '지출내역',
+    '/transactions/new': '지출추가',
   };
 
   //  '/transactions/[...slug]': '지출 내역 수정', 이 적용이 되지 않기에 아래처럼 함
